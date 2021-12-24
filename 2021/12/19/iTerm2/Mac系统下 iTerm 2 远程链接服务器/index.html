@@ -1,0 +1,236 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mac系统下iTerm2远程链接服务器 | John Doe</title><meta name="keywords" content="iTerm2"><meta name="author" content="John Doe"><meta name="copyright" content="John Doe"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、下载 iTerm2 官方网址 https://www.iterm2.com/index.html  二、配置1、打开偏好设置 2、添加配置文件路径 3、创建配置文件 通过终端创建一个文件夹  12345678910说明：第一个/ssh文件夹，是家目录下的普通文件夹第二个/.ssh文件夹，是第一个ssh文件夹下面的隐藏文件夹。（不显示隐藏文件夹时，是看不见的）文件夹的名称前面加“.”，为隐藏文件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mac系统下iTerm2远程链接服务器">
+<meta property="og:url" content="http://www.zhangxiaotao.live/2021/12/19/iTerm2/Mac%E7%B3%BB%E7%BB%9F%E4%B8%8B%20iTerm%202%20%E8%BF%9C%E7%A8%8B%E9%93%BE%E6%8E%A5%E6%9C%8D%E5%8A%A1%E5%99%A8/index.html">
+<meta property="og:site_name" content="John Doe">
+<meta property="og:description" content="一、下载 iTerm2 官方网址 https://www.iterm2.com/index.html  二、配置1、打开偏好设置 2、添加配置文件路径 3、创建配置文件 通过终端创建一个文件夹  12345678910说明：第一个/ssh文件夹，是家目录下的普通文件夹第二个/.ssh文件夹，是第一个ssh文件夹下面的隐藏文件夹。（不显示隐藏文件夹时，是看不见的）文件夹的名称前面加“.”，为隐藏文件">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img1.baidu.com/it/u=887918572,2682886827&amp;fm=26&amp;fmt=auto">
+<meta property="article:published_time" content="2021-12-19T01:48:00.000Z">
+<meta property="article:modified_time" content="2021-12-19T02:12:46.355Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="iTerm2">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img1.baidu.com/it/u=887918572,2682886827&amp;fm=26&amp;fmt=auto"><link rel="shortcut icon" href="/img/avatar.png"><link rel="canonical" href="http://www.zhangxiaotao.live/2021/12/19/iTerm2/Mac%E7%B3%BB%E7%BB%9F%E4%B8%8B%20iTerm%202%20%E8%BF%9C%E7%A8%8B%E9%93%BE%E6%8E%A5%E6%9C%8D%E5%8A%A1%E5%99%A8/"><link rel="preconnect" href="//cdn.jsdelivr.net"><link rel="preconnect" href="//busuanzi.ibruce.info"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer=""></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: {"appId":"B0YYEXE704","apiKey":"df3b5032cce15f8c2fe870edf0ff7d98","indexName":"blog","hits":{"per_page":10},"languages":{"input_placeholder":"搜索文章","hits_empty":"找不到您查询的内容：${query}","hits_stats":"找到 ${hits} 条结果，用时 ${time} 毫秒"}},
+  localSearch: undefined,
+  translate: {"defaultEncoding":1,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":500},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Mac系统下iTerm2远程链接服务器',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-12-19 10:12:46'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/mouse.css"><style>#article-container.post-content h1:before, h2:before, h3:before, h4:before, h5:before, h6:before { -webkit-animation: avatar_turn_around 1s linear infinite; -moz-animation: avatar_turn_around 1s linear infinite; -o-animation: avatar_turn_around 1s linear infinite; -ms-animation: avatar_turn_around 1s linear infinite; animation: avatar_turn_around 1s linear infinite; }</style><link rel="stylesheet" href="/css/copyright.css"><link rel="stylesheet" href="/css/modify.styl"><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/HCLonely/images@master/others/heartbeat.min.css"><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="wizard-scene"><div class="wizard-objects"><div class="wizard-square"></div><div class="wizard-circle"></div><div class="wizard-triangle"></div></div><div class="wizard"><div class="wizard-body"></div><div class="wizard-right-arm"><div class="wizard-right-hand"></div></div><div class="wizard-left-arm"><div class="wizard-left-hand"></div></div><div class="wizard-head"><div class="wizard-beard"></div><div class="wizard-face"><div class="wizard-adds"></div></div><div class="wizard-hat"><div class="wizard-hat-of-the-hat"></div><div class="wizard-four-point-star --first"></div><div class="wizard-four-point-star --second"></div><div class="wizard-four-point-star --third"></div></div></div></div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/typora/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">264</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">28</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">28</div></a></div></div></div><hr><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background: transparent"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">John Doe</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Mac系统下iTerm2远程链接服务器</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-12-19T01:48:00.000Z" title="发表于 2021-12-19 09:48:00">2021-12-19</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-12-19T02:12:46.355Z" title="更新于 2021-12-19 10:12:46">2021-12-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/iTerm2/">iTerm2</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Mac系统下iTerm2远程链接服务器"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="一、下载-iTerm2"><a href="#一、下载-iTerm2" class="headerlink" title="一、下载 iTerm2"></a>一、下载 iTerm2</h2><blockquote>
+<p>官方网址</p>
+<p><a target="_blank" rel="noopener" href="https://links.jianshu.com/go?to=https://www.iterm2.com/index.html">https://www.iterm2.com/index.html</a></p>
+</blockquote>
+<h2 id="二、配置"><a href="#二、配置" class="headerlink" title="二、配置"></a>二、配置</h2><h3 id="1、打开偏好设置"><a href="#1、打开偏好设置" class="headerlink" title="1、打开偏好设置"></a>1、打开偏好设置</h3><p><img src="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/typora/image-20211219091717996.png" alt="image-20211219091717996"></p>
+<h3 id="2、添加配置文件路径"><a href="#2、添加配置文件路径" class="headerlink" title="2、添加配置文件路径"></a>2、添加配置文件路径</h3><p><img src="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/typora/image-20211219091733290.png" alt="image-20211219091733290"></p>
+<h3 id="3、创建配置文件"><a href="#3、创建配置文件" class="headerlink" title="3、创建配置文件"></a>3、创建配置文件</h3><ul>
+<li>通过终端创建一个文件夹</li>
+</ul>
+<figure class="highlight jsx"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">说明：</span><br><span class="line">第一个/ssh文件夹，是家目录下的普通文件夹</span><br><span class="line">第二个/.ssh文件夹，是第一个ssh文件夹下面的隐藏文件夹。（不显示隐藏文件夹时，是看不见的）</span><br><span class="line"></span><br><span class="line">文件夹的名称前面加“.”，为隐藏文件夹。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">在用户家目录下，创建一个文件夹</span><br><span class="line"></span><br><span class="line">mkdir -p ~<span class="regexp">/ssh/</span>.ssh/</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>在 ~/ssh/.ssh/ 路径下创建配置文件centos6</li>
+</ul>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">创建配置文件</span><br><span class="line"></span><br><span class="line">touch centos6</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="4、修改配置文件内容"><a href="#4、修改配置文件内容" class="headerlink" title="4、修改配置文件内容"></a>4、修改配置文件内容</h3><ul>
+<li>文件内容如下：</li>
+<li>注意将相关内容，替换成自己的。</li>
+</ul>
+<h4 id="1）不设置端口号"><a href="#1）不设置端口号" class="headerlink" title="1）不设置端口号"></a>1）不设置端口号</h4><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/expect -f</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> HOST 你的虚拟机IP地址</span><br><span class="line"><span class="built_in">set</span> USER 你的虚拟机用户名</span><br><span class="line"><span class="built_in">set</span> PASSWORD 你的虚拟机登陆密码</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">spawn ssh <span class="variable">$USER</span>@<span class="variable">$HOST</span></span><br><span class="line">expect {</span><br><span class="line">        <span class="string">"yes/no"</span> {send <span class="string">"yes\r"</span>;exp_continue;}</span><br><span class="line">         <span class="string">"*password:*"</span> { send <span class="string">"<span class="variable">$PASSWORD</span>\r"</span> }</span><br><span class="line">        }</span><br><span class="line">interact</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="2）设置端口号"><a href="#2）设置端口号" class="headerlink" title="2）设置端口号"></a>2）设置端口号</h4><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/expect -f</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> PORT 设置你的虚拟机端口号，一般是22</span><br><span class="line"><span class="built_in">set</span> HOST 你的虚拟机IP地址</span><br><span class="line"><span class="built_in">set</span> USER 你的虚拟机用户名</span><br><span class="line"><span class="built_in">set</span> PASSWORD 你的虚拟机登陆密码</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">spawn ssh -p <span class="variable">$PORT</span> <span class="variable">$USER</span>@<span class="variable">$HOST</span></span><br><span class="line">expect {</span><br><span class="line">        <span class="string">"yes/no"</span> {send <span class="string">"yes\r"</span>;exp_continue;}</span><br><span class="line">         <span class="string">"*password:*"</span> { send <span class="string">"<span class="variable">$PASSWORD</span>\r"</span> }</span><br><span class="line">        }</span><br><span class="line">interact</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="三、登陆"><a href="#三、登陆" class="headerlink" title="三、登陆"></a>三、登陆</h2><h3 id="1、没有设置端口号"><a href="#1、没有设置端口号" class="headerlink" title="1、没有设置端口号"></a>1、没有设置端口号</h3><p>如果我们写配置文件时没有使用端口号，则在 iTerm2 中使用如下命令登录 Linux</p>
+<figure class="highlight css"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">172.16</span>.<span class="number">178.128</span> 指的是虚拟机的 IP 地址</span><br><span class="line"></span><br><span class="line">ssh root<span class="keyword">@172</span>.16.178.128</span><br></pre></td></tr></tbody></table></figure>
+
+<p>注意：<br> 这里的 root 是你的用户名，要和配置文件中的一致，<br> 而配置文件中的又要和你的虚拟机中设置的一致，这点要注意</p>
+<h3 id="2、设置了端口号"><a href="#2、设置了端口号" class="headerlink" title="2、设置了端口号"></a>2、设置了端口号</h3><p>如果我们写配置文件时使用了端口号（以22举例），则在 iTerm2 中使用如下命令登录 Linux</p>
+<figure class="highlight css"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -<span class="selector-tag">p</span> <span class="number">22</span> root<span class="keyword">@172</span>.16.178.128</span><br></pre></td></tr></tbody></table></figure>
+
+<p>回车后输入密码即可登录，要退出登录只需输入 exit 命令即可</p>
+<p>上面的都做好后，使用 Mac 自带的终端也可以登录 Linux 系统，</p>
+<p>如果一开始就没有使用 iTerm2 这个软件，<br> 那么我们也可以直接在自带终端中输入 ssh root@你的虚拟机IP地址 来登录 Linux 系统</p>
+<h3 id="3、点击Profiles菜单下面的配置文件，登陆成功。"><a href="#3、点击Profiles菜单下面的配置文件，登陆成功。" class="headerlink" title="3、点击Profiles菜单下面的配置文件，登陆成功。"></a>3、点击Profiles菜单下面的配置文件，登陆成功。</h3><p><img src="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/typora/image-20211219091824692.png" alt="image-20211219091824692"></p>
+<p>docker run -p 6379:6379 –name redis-test -v /etc/redis.conf:/etc/redis/redis.conf -v /usr/local/redis/data:/data -d redis redis-server /etc/redis/redis.conf –appendonly yes</p>
+</article><div class="post-copyright"><div class="post-copyright__title"><span class="post-copyright-info"><h>Mac系统下iTerm2远程链接服务器</h></span></div><div class="post-copyright__type"><span class="post-copyright-info"><a href="http://www.zhangxiaotao.live/2021/12/19/iTerm2/Mac%E7%B3%BB%E7%BB%9F%E4%B8%8B%20iTerm%202%20%E8%BF%9C%E7%A8%8B%E9%93%BE%E6%8E%A5%E6%9C%8D%E5%8A%A1%E5%99%A8/">http://www.zhangxiaotao.live/2021/12/19/iTerm2/Mac%E7%B3%BB%E7%BB%9F%E4%B8%8B%20iTerm%202%20%E8%BF%9C%E7%A8%8B%E9%93%BE%E6%8E%A5%E6%9C%8D%E5%8A%A1%E5%99%A8/</a></span></div><div class="post-copyright-m"><div class="post-copyright-m-info"><div class="post-copyright-a" style="display: inline-block;width: 120px"><h>作者</h><div class="post-copyright-cc-info"><h>John Doe</h></div></div><div class="post-copyright-c" style="display: inline-block;width: 120px"><h>发布于</h><div class="post-copyright-cc-info"><h>2021-12-19</h></div></div><div class="post-copyright-u" style="display: inline-block;width: 120px"><h>更新于</h><div class="post-copyright-cc-info"><h>2021-12-19</h></div></div><div class="post-copyright-c" style="display: inline-block;width: 120px"><h>许可协议</h><div class="post-copyright-cc-info"><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a rel="noopener" target="_blank" title="CC BY 4.0" href="https://creativecommons.org/licenses/by/4.0/deed.zh">CC BY 4.0</a></div></div></div></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/iTerm2/">iTerm2</a></div><div class="post_share"><div class="social-share" data-image="https://img1.baidu.com/it/u=887918572,2682886827&amp;fm=26&amp;fmt=auto" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer=""></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/12/19/Redis/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2redis%E5%B9%B6%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5%20/"><img class="prev-cover" src="https://img1.baidu.com/it/u=1999190876,702683880&amp;fm=26&amp;fmt=auto" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">阿里云ECS使用docker部署redis并远程连接</div></div></a></div><div class="next-post pull-right"><a href="/2021/12/19/iTerm2/Mac%E9%85%8D%E7%BD%AEiTerm2%E4%B8%BB%E9%A2%98/"><img class="next-cover" src="https://img1.baidu.com/it/u=887918572,2682886827&amp;fm=26&amp;fmt=auto" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">mac配置iTerm2主题</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/12/19/iTerm2/Mac%E9%85%8D%E7%BD%AEiTerm2%E4%B8%BB%E9%A2%98/" title="mac配置iTerm2主题"><img class="cover" src="https://img1.baidu.com/it/u=887918572,2682886827&amp;fm=26&amp;fmt=auto" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-19</div><div class="title">mac配置iTerm2主题</div></div></a></div></div></div><hr><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/typora/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"></div><div class="author-info__name">John Doe</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">264</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">28</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">28</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/zhzhang12138"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my blog   <img src="https://cdn.jsdelivr.net/gh/CNhuazhu/Image/pig.gif"></div><timing></timing></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%B8%8B%E8%BD%BD-iTerm2"><span class="toc-number">1.</span> <span class="toc-text">一、下载 iTerm2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E9%85%8D%E7%BD%AE"><span class="toc-number">2.</span> <span class="toc-text">二、配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E6%89%93%E5%BC%80%E5%81%8F%E5%A5%BD%E8%AE%BE%E7%BD%AE"><span class="toc-number">2.1.</span> <span class="toc-text">1、打开偏好设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E6%B7%BB%E5%8A%A0%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84"><span class="toc-number">2.2.</span> <span class="toc-text">2、添加配置文件路径</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E5%88%9B%E5%BB%BA%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">2.3.</span> <span class="toc-text">3、创建配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9"><span class="toc-number">2.4.</span> <span class="toc-text">4、修改配置文件内容</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%EF%BC%89%E4%B8%8D%E8%AE%BE%E7%BD%AE%E7%AB%AF%E5%8F%A3%E5%8F%B7"><span class="toc-number">2.4.1.</span> <span class="toc-text">1）不设置端口号</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%EF%BC%89%E8%AE%BE%E7%BD%AE%E7%AB%AF%E5%8F%A3%E5%8F%B7"><span class="toc-number">2.4.2.</span> <span class="toc-text">2）设置端口号</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E7%99%BB%E9%99%86"><span class="toc-number">3.</span> <span class="toc-text">三、登陆</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E6%B2%A1%E6%9C%89%E8%AE%BE%E7%BD%AE%E7%AB%AF%E5%8F%A3%E5%8F%B7"><span class="toc-number">3.1.</span> <span class="toc-text">1、没有设置端口号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E8%AE%BE%E7%BD%AE%E4%BA%86%E7%AB%AF%E5%8F%A3%E5%8F%B7"><span class="toc-number">3.2.</span> <span class="toc-text">2、设置了端口号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E7%82%B9%E5%87%BBProfiles%E8%8F%9C%E5%8D%95%E4%B8%8B%E9%9D%A2%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%EF%BC%8C%E7%99%BB%E9%99%86%E6%88%90%E5%8A%9F%E3%80%82"><span class="toc-number">3.3.</span> <span class="toc-text">3、点击Profiles菜单下面的配置文件，登陆成功。</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/12/23/Go/Gin/01%20Gin%E6%A1%86%E6%9E%B6%E7%AE%80%E4%BB%8B/" title="Gin框架简介"><img src="https://img0.baidu.com/it/u=2805562940,1575021077&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=500&amp;h=667" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Gin框架简介"></a><div class="content"><a class="title" href="/2021/12/23/Go/Gin/01%20Gin%E6%A1%86%E6%9E%B6%E7%AE%80%E4%BB%8B/" title="Gin框架简介">Gin框架简介</a><time datetime="2021-12-23T12:49:00.000Z" title="发表于 2021-12-23 20:49:00">2021-12-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/12/23/Go/Gin/02%20golang%20%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%83%AD%E5%8A%A0%E8%BD%BD/" title="golang程序的热加载"><img src="https://img0.baidu.com/it/u=2805562940,1575021077&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=500&amp;h=667" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="golang程序的热加载"></a><div class="content"><a class="title" href="/2021/12/23/Go/Gin/02%20golang%20%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%83%AD%E5%8A%A0%E8%BD%BD/" title="golang程序的热加载">golang程序的热加载</a><time datetime="2021-12-23T12:48:00.000Z" title="发表于 2021-12-23 20:48:00">2021-12-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/12/23/Go/Gin/03%20Gin%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%B7%AF%E7%94%B1/" title="Gin框架中的路由"><img src="https://img0.baidu.com/it/u=2805562940,1575021077&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=500&amp;h=667" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Gin框架中的路由"></a><div class="content"><a class="title" href="/2021/12/23/Go/Gin/03%20Gin%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%B7%AF%E7%94%B1/" title="Gin框架中的路由">Gin框架中的路由</a><time datetime="2021-12-23T12:47:00.000Z" title="发表于 2021-12-23 20:47:00">2021-12-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/12/23/Go/Gin/04%20Gin%20HTML%20%E6%A8%A1%E6%9D%BF%E6%B8%B2%E6%9F%93/" title="Gin HTML 模板渲染"><img src="https://img0.baidu.com/it/u=2805562940,1575021077&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=500&amp;h=667" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Gin HTML 模板渲染"></a><div class="content"><a class="title" href="/2021/12/23/Go/Gin/04%20Gin%20HTML%20%E6%A8%A1%E6%9D%BF%E6%B8%B2%E6%9F%93/" title="Gin HTML 模板渲染">Gin HTML 模板渲染</a><time datetime="2021-12-23T12:46:00.000Z" title="发表于 2021-12-23 20:46:00">2021-12-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/12/23/Go/Gin/05%20%E9%9D%99%E6%80%81%E6%96%87%E4%BB%B6%E6%9C%8D%E5%8A%A1/" title="静态文件服务"><img src="https://img0.baidu.com/it/u=2805562940,1575021077&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=500&amp;h=667" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="静态文件服务"></a><div class="content"><a class="title" href="/2021/12/23/Go/Gin/05%20%E9%9D%99%E6%80%81%E6%96%87%E4%BB%B6%E6%9C%8D%E5%8A%A1/" title="静态文件服务">静态文件服务</a><time datetime="2021-12-23T12:45:00.000Z" title="发表于 2021-12-23 20:45:00">2021-12-23</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent"><div id="footer-wrap"><div class="copyright">©2020 - 2021 <i id="heartbeat" class="fa fas fa-heartbeat"></i>  John Doe</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my <a href="">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="translateLink" type="button" title="简繁转换">简</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="algolia-search"><div class="search-dialog"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="/js/search/algolia.js"></script><div class="js-pjax"><script async="async">var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',()=> {preloader.endLoading()})
+setTimeout(function(){preloader.endLoading();}, 3000);</script></div><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '',
+      appKey: '',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script src="/js/timing.js"></script><script src="https://cdn.jsdelivr.net/gh/weilain/cdn-photo/js/jquery.min.js"></script><script async="" data-pjax="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script type="text/javascript" src="/js/crash_cheat.js"></script></body></html>

@@ -1,0 +1,394 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Gin HTML 模板渲染 | John Doe</title><meta name="keywords" content="Gin框架"><meta name="author" content="John Doe"><meta name="copyright" content="John Doe"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="1、全部模板放在一个目录里面的配置方法1 、我们首先在项目根目录新建 templates 文件夹，然后在文件夹中新建 index.html 1234567891011121314151617<!DOCTYPE html><html lang=&quot;en&quot;><head>    <meta charset=&quot;UTF-8&quot;&amp;g">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gin HTML 模板渲染">
+<meta property="og:url" content="http://www.zhangxiaotao.live/2021/12/23/Go/Gin/04%20Gin%20HTML%20%E6%A8%A1%E6%9D%BF%E6%B8%B2%E6%9F%93/index.html">
+<meta property="og:site_name" content="John Doe">
+<meta property="og:description" content="1、全部模板放在一个目录里面的配置方法1 、我们首先在项目根目录新建 templates 文件夹，然后在文件夹中新建 index.html 1234567891011121314151617<!DOCTYPE html><html lang=&quot;en&quot;><head>    <meta charset=&quot;UTF-8&quot;&amp;g">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img0.baidu.com/it/u=2805562940,1575021077&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=500&amp;h=667">
+<meta property="article:published_time" content="2021-12-23T12:46:00.000Z">
+<meta property="article:modified_time" content="2021-12-23T13:31:08.368Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="Gin框架">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img0.baidu.com/it/u=2805562940,1575021077&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=500&amp;h=667"><link rel="shortcut icon" href="/img/avatar.png"><link rel="canonical" href="http://www.zhangxiaotao.live/2021/12/23/Go/Gin/04%20Gin%20HTML%20%E6%A8%A1%E6%9D%BF%E6%B8%B2%E6%9F%93/"><link rel="preconnect" href="//cdn.jsdelivr.net"><link rel="preconnect" href="//busuanzi.ibruce.info"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer=""></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: {"appId":"B0YYEXE704","apiKey":"df3b5032cce15f8c2fe870edf0ff7d98","indexName":"blog","hits":{"per_page":10},"languages":{"input_placeholder":"搜索文章","hits_empty":"找不到您查询的内容：${query}","hits_stats":"找到 ${hits} 条结果，用时 ${time} 毫秒"}},
+  localSearch: undefined,
+  translate: {"defaultEncoding":1,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":500},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Gin HTML 模板渲染',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-12-23 21:31:08'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/mouse.css"><style>#article-container.post-content h1:before, h2:before, h3:before, h4:before, h5:before, h6:before { -webkit-animation: avatar_turn_around 1s linear infinite; -moz-animation: avatar_turn_around 1s linear infinite; -o-animation: avatar_turn_around 1s linear infinite; -ms-animation: avatar_turn_around 1s linear infinite; animation: avatar_turn_around 1s linear infinite; }</style><link rel="stylesheet" href="/css/copyright.css"><link rel="stylesheet" href="/css/modify.styl"><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/HCLonely/images@master/others/heartbeat.min.css"><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="wizard-scene"><div class="wizard-objects"><div class="wizard-square"></div><div class="wizard-circle"></div><div class="wizard-triangle"></div></div><div class="wizard"><div class="wizard-body"></div><div class="wizard-right-arm"><div class="wizard-right-hand"></div></div><div class="wizard-left-arm"><div class="wizard-left-hand"></div></div><div class="wizard-head"><div class="wizard-beard"></div><div class="wizard-face"><div class="wizard-adds"></div></div><div class="wizard-hat"><div class="wizard-hat-of-the-hat"></div><div class="wizard-four-point-star --first"></div><div class="wizard-four-point-star --second"></div><div class="wizard-four-point-star --third"></div></div></div></div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/typora/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">264</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">28</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">28</div></a></div></div></div><hr><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background: transparent"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">John Doe</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Gin HTML 模板渲染</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-12-23T12:46:00.000Z" title="发表于 2021-12-23 20:46:00">2021-12-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-12-23T13:31:08.368Z" title="更新于 2021-12-23 21:31:08">2021-12-23</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Go/">Go</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Go/Gin%E6%A1%86%E6%9E%B6/">Gin框架</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Gin HTML 模板渲染"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="1、全部模板放在一个目录里面的配置方法"><a href="#1、全部模板放在一个目录里面的配置方法" class="headerlink" title="1、全部模板放在一个目录里面的配置方法"></a>1、全部模板放在一个目录里面的配置方法</h2><p><strong>1 、我们首先在项目根目录新建 templates 文件夹，然后在文件夹中新建 index.html</strong></p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X- UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"IE=edge"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width,  initial-scale=1.0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span> Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>这是一个 html 模板<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">h3</span>&gt;</span>{{.title}}<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p> <strong>2 、Gin 框架中使用 c.HTML 可以渲染模板 ，渲染模板前需要使用 Load HTMLGlob() 或者 Load HTMLFiles()方法加载模板。</strong></p>
+<figure class="highlight go"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">router.GET(<span class="string">"/"</span>,  <span class="function"><span class="keyword">func</span><span class="params">(c  *gin.Context)</span></span>  {</span><br><span class="line">	c.HTML(http.StatusOK,  <span class="string">"default/index.html"</span>,  <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>{}{</span><br><span class="line">		<span class="string">"title"</span>:  <span class="string">"前台首页"</span></span><br><span class="line">	})</span><br><span class="line">})</span><br><span class="line"></span><br><span class="line">router.GET(<span class="string">"/"</span>,  <span class="function"><span class="keyword">func</span><span class="params">(c  *gin.Context)</span></span>  {</span><br><span class="line">	c.HTML(http.StatusOK,  <span class="string">"index.html"</span>,  gin.H{</span><br><span class="line">		<span class="string">"title"</span>:  <span class="string">"Main  website"</span>,</span><br><span class="line">	})</span><br><span class="line">})</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight go"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"github.com/gin-gonic/gin"</span></span><br><span class="line">	<span class="string">"net/http"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> {</span><br><span class="line">	router := gin.Default()</span><br><span class="line">	router.LoadHTMLGlob(<span class="string">"templates/*"</span>)</span><br><span class="line">	<span class="comment">//router.Load HTMLFiles("templates/template1.html",  "templates/template2.html")</span></span><br><span class="line">	router.GET(<span class="string">"/"</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> {</span><br><span class="line">		c.HTML(http.StatusOK, <span class="string">"index.html"</span>, gin.H{</span><br><span class="line">			<span class="string">"title"</span>: <span class="string">"Main  website"</span>,</span><br><span class="line">		})</span><br><span class="line">	})</span><br><span class="line">	router.Run(<span class="string">":8080"</span>)</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="2、模板放在不同目录里面的配置方法"><a href="#2、模板放在不同目录里面的配置方法" class="headerlink" title="2、模板放在不同目录里面的配置方法"></a>2、模板放在不同目录里面的配置方法</h2><p>Gin 框架中如果不同目录下面有同名模板的话我们需要使用下面方法加载模板 </p>
+<p><strong>注意：</strong>定义模板的时候需要通过 define 定义名称 </p>
+<p><strong>templates/admin/index.html</strong> </p>
+<p><code>&lt;!-- 相当于给模板定义一个名字 define end 成对出现--&gt;</code></p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">{{ define "admin/index.html" }}</span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X- UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"IE=edge"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width,  initial-scale=1.0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span> Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>后台模板<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">h3</span>&gt;</span>{{.title}}<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line">{{ end }}</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>templates/default/index.html</strong> </p>
+<p><code>&lt;!-- 相当于给模板定义一个名字 define end 成对出现--&gt;</code></p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">{{ define "default/index.html" }}</span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang="en"&gt;</span><br><span class="line"></span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset="UTF-8"&gt;</span><br><span class="line">    &lt;meta http-equiv="X- UA-Compatible" content="IE=edge"&gt;</span><br><span class="line">    &lt;meta name="viewport" content="width=device-width,  initial-scale=1.0"&gt;</span><br><span class="line">    &lt;title&gt; Document&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line"></span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;h1&gt;前台模板&lt;/h1&gt;</span><br><span class="line">    &lt;h3&gt;{{.title}}&lt;/h3&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line"></span><br><span class="line">&lt;/html&gt;</span><br><span class="line">{{end}}</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>业务逻辑</strong></p>
+<figure class="highlight go"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"net/http"</span></span><br><span class="line"></span><br><span class="line">	<span class="string">"github.com/gin-gonic/gin"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> {</span><br><span class="line">	router := gin.Default()</span><br><span class="line">	router.LoadHTMLGlob(<span class="string">"templates/**/*"</span>)</span><br><span class="line">	router.GET(<span class="string">"/"</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> {</span><br><span class="line">		c.HTML(http.StatusOK, <span class="string">"default/index.html"</span>, gin.H{</span><br><span class="line">			<span class="string">"title"</span>: <span class="string">"前台首页"</span>,</span><br><span class="line">		})</span><br><span class="line">	})</span><br><span class="line">	router.GET(<span class="string">"/admin"</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> {</span><br><span class="line">		c.HTML(http.StatusOK, <span class="string">"admin/index.html"</span>, gin.H{</span><br><span class="line">			<span class="string">"title"</span>: <span class="string">"后台首页"</span>,</span><br><span class="line">		})</span><br><span class="line">	})</span><br><span class="line">	router.Run(<span class="string">":8080"</span>)</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>注意：</strong><code>如果模板在多级目录里面的话需要这样配置 r.LoadHTMLGlob("templates/**/**/*") /** </code></p>
+<p>表示目录 </p>
+<h2 id="3、gin-模板基本语法"><a href="#3、gin-模板基本语法" class="headerlink" title="3、gin 模板基本语法"></a>3、<strong>gin</strong> 模板基本语法</h2><h3 id="3-1-输出数据"><a href="#3-1-输出数据" class="headerlink" title="3.1 { {.} }输出数据"></a>3.1 { {.} }输出数据</h3><p>模板语法都包含在{ {和} }中间，其中{ {.} }中的点表示当前对象。 </p>
+<p>当我们传入一个结构体对象时，我们可以根据.来访问结构体的对应字段。例如： </p>
+<p><strong>业务逻辑</strong></p>
+<figure class="highlight go"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"net/http"</span></span><br><span class="line"></span><br><span class="line">	<span class="string">"github.com/gin-gonic/gin"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> UserInfo <span class="keyword">struct</span> {</span><br><span class="line">	Name   <span class="keyword">string</span></span><br><span class="line">	Gender <span class="keyword">string</span></span><br><span class="line">	Age    <span class="keyword">int</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> {</span><br><span class="line">	router := gin.Default()</span><br><span class="line">	router.LoadHTMLGlob(<span class="string">"templates/**/*"</span>)</span><br><span class="line">	user := UserInfo{</span><br><span class="line">		Name:   <span class="string">"张三"</span>,</span><br><span class="line">		Gender: <span class="string">"男"</span>,</span><br><span class="line">		Age:    <span class="number">18</span>,</span><br><span class="line">	}</span><br><span class="line">	router.GET(<span class="string">"/"</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> {</span><br><span class="line">		c.HTML(http.StatusOK, <span class="string">"default/index.html"</span>, <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>{}{<span class="string">"title"</span>: <span class="string">"前台首页"</span>,</span><br><span class="line">			<span class="string">"user"</span>: user,</span><br><span class="line">		})</span><br><span class="line">	})</span><br><span class="line">	router.Run(<span class="string">":8080"</span>)</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<p>模板</p>
+<p><code>&lt;!-- 相当于给模板定义一个名字 define  end 成对出现--&gt;</code></p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">{{ define "default/index.html" }}</span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang="en"&gt;</span><br><span class="line"></span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset="UTF-8"&gt;</span><br><span class="line">    &lt;meta http-equiv="X- UA-Compatible" content="IE=edge"&gt;</span><br><span class="line">    &lt;meta name="viewport" content="width=device-width,  initial-scale=1.0"&gt;</span><br><span class="line">    &lt;title&gt; Document&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line"></span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;h1&gt;前台模板&lt;/h1&gt;</span><br><span class="line">    &lt;h3&gt;{{.title}}&lt;/h3&gt;</span><br><span class="line"></span><br><span class="line">    &lt;h4&gt;{{.user.Name}}&lt;/h4&gt;</span><br><span class="line">    &lt;h4&gt;{{.user.Age}}&lt;/h4&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line"></span><br><span class="line">&lt;/html&gt;</span><br><span class="line">{{end}}</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="3-2-注释"><a href="#3-2-注释" class="headerlink" title="3.2 注释"></a>3.2 注释</h3><figure class="highlight go"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">{{<span class="comment">/*  a  comment  */</span>}}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>注释，执行时会忽略。可以多行。注释不能嵌套，并且必须紧贴分界符始止。</p>
+<h3 id="3-3-变量"><a href="#3-3-变量" class="headerlink" title="3.3 变量"></a>3.3 变量</h3><p>我们还可以在模板中声明变量，用来保存传入模板的数据或其他语句生成的结果。具体语法 </p>
+<p>如下：</p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h4</span>&gt;</span>{{$obj := .title}}<span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h4</span>&gt;</span>{{$obj}}<span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="3-4-移除空格"><a href="#3-4-移除空格" class="headerlink" title="3.4 移除空格"></a>3.4 移除空格</h3><p>有时候我们在使用模板语法的时候会不可避免的引入一下空格或者换行符，这样模板最终渲 </p>
+<p>染出来的内容可能就和我们想的不一样，这个时候可以使用{ {-语法去除模板内容左侧的所有 </p>
+<p>空白符号， 使用-} }去除模板内容右侧的所有空白符号。</p>
+<p>例如：</p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">{{-  .Name  -}}</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>注意：-要紧挨 ，同时与模板值之间需要使用空格分隔。</strong></p>
+<h3 id="3-5-比较函数"><a href="#3-5-比较函数" class="headerlink" title="3.5 比较函数"></a>3.5 比较函数</h3><p>布尔函数会将任何类型的零值视为假，其余视为真。 </p>
+<p>下面是定义为函数的二元比较运算的集合： </p>
+<table>
+<thead>
+<tr>
+<th>二元比较运算</th>
+<th>二元比较运算</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>eq</td>
+<td>如果 arg1 == arg2 则返回真</td>
+</tr>
+<tr>
+<td>ne</td>
+<td>如果 arg1 != arg2 则返回真</td>
+</tr>
+<tr>
+<td>lt</td>
+<td>如果 arg1 &lt; arg2 则返回真</td>
+</tr>
+<tr>
+<td>le</td>
+<td>如果 arg1 &lt;= arg2 则返回真</td>
+</tr>
+<tr>
+<td>gt</td>
+<td>如果 arg1 &gt; arg2 则返回真</td>
+</tr>
+<tr>
+<td>ge</td>
+<td>如果 arg1 &gt;= arg2 则返回真</td>
+</tr>
+</tbody></table>
+<h3 id="3-6-条件判断"><a href="#3-6-条件判断" class="headerlink" title="3.6 条件判断"></a>3.6 条件判断</h3><p>Go 模板语法中的条件判断有以下几种: </p>
+<figure class="highlight go"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">{<span class="keyword">if</span>  pipeline}}  T1  {{end}}</span><br><span class="line">{{<span class="keyword">if</span>  pipeline}}  T1  {{<span class="keyword">else</span>}}  T0  {{end}}</span><br><span class="line"></span><br><span class="line">{{<span class="keyword">if</span>  pipeline}}  T1  {{<span class="keyword">else</span>  <span class="keyword">if</span>  pipeline}}  T0  {{end}}</span><br><span class="line">{{<span class="keyword">if</span>  gt  .score  <span class="number">60</span>}}</span><br><span class="line">及格</span><br><span class="line">{{<span class="keyword">else</span>}}</span><br><span class="line">不及格</span><br><span class="line">{{end}}</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">{{<span class="keyword">if</span>  gt  .score  <span class="number">90</span>}}</span><br><span class="line">优秀</span><br><span class="line">{{<span class="keyword">else</span>  <span class="keyword">if</span>  gt  .score  <span class="number">60</span>}}</span><br><span class="line">及格</span><br><span class="line">{{<span class="keyword">else</span>}}</span><br><span class="line">不及格</span><br><span class="line">{{end}}</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="3-7-range"><a href="#3-7-range" class="headerlink" title="3.7 range"></a>3.7 range</h3><p>Go 的模板语法中使用 range 关键字进行遍历，有以下两种写法，其中 pipeline 的值必须是数 组、切片、字典或者通道。</p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">{{range  $key,$value  :=  .obj}}</span><br><span class="line">	{{$value}}</span><br><span class="line">{{end}}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>如果 pipeline 的值其长度为 0 ，不会有任何输出</p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">{{$key,$value  :=  .obj}}</span><br><span class="line">	{{$value}}</span><br><span class="line">{{else}}</span><br><span class="line">	pipeline 的值其长度为 0</span><br><span class="line">{{end}}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>如果 pipeline 的值其长度为 0 ，则会执行 T0。</p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">router.GET("/",  func(c  *gin.Context)  {</span><br><span class="line">		c.HTML(http.StatusOK,  "default/index.html",  </span><br><span class="line">		map[string]interface{}{ "hobby":  []string{"吃饭",  "睡觉",  "写代码"},</span><br><span class="line">	})</span><br><span class="line">})</span><br><span class="line"></span><br><span class="line">{{range  $key,$value  :=  .hobby}}</span><br><span class="line">	<span class="tag">&lt;<span class="name">p</span>&gt;</span>{{$value}}<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">{{end}}	</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="3-8-with"><a href="#3-8-with" class="headerlink" title="3.8 with"></a>3.8 with</h3><figure class="highlight go"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">user := UserInfo{</span><br><span class="line">	Name:   <span class="string">"张三"</span>,</span><br><span class="line">	Gender: <span class="string">"男"</span>,</span><br><span class="line">	Age:    <span class="number">18</span>,</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">router.GET(<span class="string">"/"</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> {</span><br><span class="line">	c.HTML(http.StatusOK, <span class="string">"default/index.html"</span>, <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>{}{</span><br><span class="line"></span><br><span class="line">		<span class="string">"user"</span>: user,</span><br><span class="line">	})</span><br><span class="line">})</span><br></pre></td></tr></tbody></table></figure>
+
+<p>以前要输出数据：</p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h4</span>&gt;</span>{{.user.Name}}<span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h4</span>&gt;</span>{{.user.Gender}}<span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h4</span>&gt;</span>{{.user.Age}}<span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>现在要输出数据：</p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">{{with  .user}}</span><br><span class="line">  <span class="tag">&lt;<span class="name">h4</span>&gt;</span>姓名：{{.Name}}<span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">h4</span>&gt;</span>性别：{{.user.Gender}}<span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">h4</span>&gt;</span>年龄：{{.Age}}<span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br><span class="line">{{end}}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>简单理解：相当于 var .=.user</p>
+<h3 id="3-9-预定义函数"><a href="#3-9-预定义函数" class="headerlink" title="3.9 预定义函数"></a>3.9 预定义函数</h3><p>执行模板时，函数从两个函数字典中查找：首先是模板函数字典，然后是全局函数字典。一 般不在模板内定义函数，而是使用 Funcs 方法添加函数到模板里。</p>
+<table>
+<thead>
+<tr>
+<th>预定义函数</th>
+<th>预定义函数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>and</td>
+<td>函数返回它的第一个 empty 参数或者最后一个参数；<br>就是说”and x y”等价于”if x then y else x”；所有参数都会执行；</td>
+</tr>
+<tr>
+<td>or</td>
+<td>返回第一个非 empty 参数或者最后一个参数；<br>亦即”or  x y”等价于”if x then x else y”；所有参数都会执行；</td>
+</tr>
+<tr>
+<td>not</td>
+<td>返回它的单个参数的布尔值的否定</td>
+</tr>
+<tr>
+<td>len</td>
+<td>返回它的参数的整数类型长度</td>
+</tr>
+<tr>
+<td>index</td>
+<td>执行结果为第一个参数以剩下的参数为索引/键指向的值；<br>如”index x 1 2 3”返回 x [ 1][2][3]的值；每个被索引的主体必须是数组、切片或者字典</td>
+</tr>
+<tr>
+<td>print</td>
+<td>即 fmt.Sprint</td>
+</tr>
+<tr>
+<td>printf</td>
+<td>即 fmt.Sprintf</td>
+</tr>
+<tr>
+<td>println</td>
+<td>即 fmt.Sprintln</td>
+</tr>
+<tr>
+<td>html</td>
+<td>返回与其参数的文本表示形式等效的转义 HTML。<br>这个函数在 html/template 中不可用。</td>
+</tr>
+<tr>
+<td>urlquery</td>
+<td>以适合嵌入到网址查询中的形式返回其参数的文本表示的转义值。<br>这个函数在 html/template 中不可用。</td>
+</tr>
+<tr>
+<td>js</td>
+<td>返回与其参数的文本表示形式等效的转义 JavaScript。</td>
+</tr>
+<tr>
+<td>call</td>
+<td>执行结果是调用第一个参数的返回值，该参数必须是函数类型，其余参数作为调用该函 数的参数；<br>如”call  .X.Y  1  2”等价于 go 语言里的 dot.X.Y(1, 2)；<br>其中Y 是函数类型的字段或者字典的值，或者其他类似情况；<br>call 的第一个参数的执行结果必须是函数类型的值（和预定义函数如 print 明显不同）<br>该函数类型值必须有 1 到 2 个返回值，如果有 2 个则后一个必须是 error 接口类型；<br>如果有 2 个返回值的方法返回的 error 非 nil，模板执行会中断并返回给调用模板执行者 该错误；</td>
+</tr>
+</tbody></table>
+<h3 id="3-10-自定义模板函数"><a href="#3-10-自定义模板函数" class="headerlink" title="3.10 自定义模板函数"></a>3.10 自定义模板函数</h3><figure class="highlight go"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">router.SetFuncMap(template.FuncMap{</span><br><span class="line">	<span class="string">"formatDate"</span>:  formatAsDate,</span><br><span class="line">})</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight go"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"html/template"</span></span><br><span class="line">	<span class="string">"net/http"</span></span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line"></span><br><span class="line">	<span class="string">"github.com/gin-gonic/gin"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">formatAsDate</span><span class="params">(t time.Time)</span> <span class="title">string</span></span> {</span><br><span class="line">	year, month, day := t.Date()</span><br><span class="line">	<span class="keyword">return</span> fmt.Sprintf(<span class="string">"%d/%02d/%02d"</span>, year, month, day)</span><br><span class="line">}</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> {</span><br><span class="line">	router := gin.Default()</span><br><span class="line"></span><br><span class="line">	<span class="comment">//注册全局模板函数 注意顺序，注册模板函数需要在加载模板上面</span></span><br><span class="line">	router.SetFuncMap(template.FuncMap{</span><br><span class="line">		<span class="string">"formatDate"</span>: formatAsDate,</span><br><span class="line">	})</span><br><span class="line">	<span class="comment">//加载模板</span></span><br><span class="line">	router.LoadHTMLGlob(<span class="string">"templates/**/*"</span>)</span><br><span class="line"></span><br><span class="line">	router.GET(<span class="string">"/"</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> {</span><br><span class="line">		c.HTML(http.StatusOK, <span class="string">"default/index.html"</span>, <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>{}{<span class="string">"title"</span>: <span class="string">"前台首页"</span>,</span><br><span class="line">			<span class="string">"now"</span>: time.Now(),</span><br><span class="line">		})</span><br><span class="line">	})</span><br><span class="line">	router.Run(<span class="string">":8080"</span>)</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<p>模板里面的用法</p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">{{.now   |  formatDate}}</span><br><span class="line">或者</span><br><span class="line">{{formatDate  .now  }}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="4-嵌套temlpate"><a href="#4-嵌套temlpate" class="headerlink" title="4 嵌套temlpate"></a>4 嵌套temlpate</h2><p><strong>注意：</strong></p>
+<p><strong>1 、引入的名字为 page_header.html 中定义的名字</strong></p>
+<p><strong>2 、引入的时候注意最后的点（ .）</strong></p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">{{template  "default/page_header.html"  .}}</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--  相当于给模板定义一个名字 define    end  成对出现--&gt;</span></span><br><span class="line"></span><br><span class="line">{{ define "default/index.html" }}</span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X- UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"IE=edge"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width,  initial-scale=1.0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span> Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    {{template "default/page_header.html" .}}</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line">{{end}}</span><br></pre></td></tr></tbody></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article><div class="post-copyright"><div class="post-copyright__title"><span class="post-copyright-info"><h>Gin HTML 模板渲染</h></span></div><div class="post-copyright__type"><span class="post-copyright-info"><a href="http://www.zhangxiaotao.live/2021/12/23/Go/Gin/04%20Gin%20HTML%20%E6%A8%A1%E6%9D%BF%E6%B8%B2%E6%9F%93/">http://www.zhangxiaotao.live/2021/12/23/Go/Gin/04%20Gin%20HTML%20%E6%A8%A1%E6%9D%BF%E6%B8%B2%E6%9F%93/</a></span></div><div class="post-copyright-m"><div class="post-copyright-m-info"><div class="post-copyright-a" style="display: inline-block;width: 120px"><h>作者</h><div class="post-copyright-cc-info"><h>John Doe</h></div></div><div class="post-copyright-c" style="display: inline-block;width: 120px"><h>发布于</h><div class="post-copyright-cc-info"><h>2021-12-23</h></div></div><div class="post-copyright-u" style="display: inline-block;width: 120px"><h>更新于</h><div class="post-copyright-cc-info"><h>2021-12-23</h></div></div><div class="post-copyright-c" style="display: inline-block;width: 120px"><h>许可协议</h><div class="post-copyright-cc-info"><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a rel="noopener" target="_blank" title="CC BY 4.0" href="https://creativecommons.org/licenses/by/4.0/deed.zh">CC BY 4.0</a></div></div></div></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Gin%E6%A1%86%E6%9E%B6/">Gin框架</a></div><div class="post_share"><div class="social-share" data-image="https://img0.baidu.com/it/u=2805562940,1575021077&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=500&amp;h=667" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer=""></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/12/23/Go/Gin/03%20Gin%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%B7%AF%E7%94%B1/"><img class="prev-cover" src="https://img0.baidu.com/it/u=2805562940,1575021077&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=500&amp;h=667" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Gin框架中的路由</div></div></a></div><div class="next-post pull-right"><a href="/2021/12/23/Go/Gin/05%20%E9%9D%99%E6%80%81%E6%96%87%E4%BB%B6%E6%9C%8D%E5%8A%A1/"><img class="next-cover" src="https://img0.baidu.com/it/u=2805562940,1575021077&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=500&amp;h=667" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">静态文件服务</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/12/23/Go/Gin/02%20golang%20%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%83%AD%E5%8A%A0%E8%BD%BD/" title="golang程序的热加载"><img class="cover" src="https://img0.baidu.com/it/u=2805562940,1575021077&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=500&amp;h=667" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-23</div><div class="title">golang程序的热加载</div></div></a></div><div><a href="/2021/12/23/Go/Gin/01%20Gin%E6%A1%86%E6%9E%B6%E7%AE%80%E4%BB%8B/" title="Gin框架简介"><img class="cover" src="https://img0.baidu.com/it/u=2805562940,1575021077&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=500&amp;h=667" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-23</div><div class="title">Gin框架简介</div></div></a></div><div><a href="/2021/12/23/Go/Gin/03%20Gin%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%B7%AF%E7%94%B1/" title="Gin框架中的路由"><img class="cover" src="https://img0.baidu.com/it/u=2805562940,1575021077&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=500&amp;h=667" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-23</div><div class="title">Gin框架中的路由</div></div></a></div><div><a href="/2021/12/23/Go/Gin/05%20%E9%9D%99%E6%80%81%E6%96%87%E4%BB%B6%E6%9C%8D%E5%8A%A1/" title="静态文件服务"><img class="cover" src="https://img0.baidu.com/it/u=2805562940,1575021077&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=500&amp;h=667" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-23</div><div class="title">静态文件服务</div></div></a></div><div><a href="/2021/12/23/Go/Gin/06%20%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90%E5%B5%8C%E5%85%A5/" title="静态资源嵌入"><img class="cover" src="https://img0.baidu.com/it/u=2805562940,1575021077&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=500&amp;h=667" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-23</div><div class="title">静态资源嵌入</div></div></a></div><div><a href="/2021/12/23/Go/Gin/07%20%E8%B7%AF%E7%94%B1%E8%AF%A6%E8%A7%A3/" title="路由详解"><img class="cover" src="https://img0.baidu.com/it/u=2805562940,1575021077&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=500&amp;h=667" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-23</div><div class="title">路由详解</div></div></a></div></div></div><hr><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/typora/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"></div><div class="author-info__name">John Doe</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">264</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">28</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">28</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/zhzhang12138"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my blog   <img src="https://cdn.jsdelivr.net/gh/CNhuazhu/Image/pig.gif"></div><timing></timing></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E5%85%A8%E9%83%A8%E6%A8%A1%E6%9D%BF%E6%94%BE%E5%9C%A8%E4%B8%80%E4%B8%AA%E7%9B%AE%E5%BD%95%E9%87%8C%E9%9D%A2%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%B9%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text">1、全部模板放在一个目录里面的配置方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E6%A8%A1%E6%9D%BF%E6%94%BE%E5%9C%A8%E4%B8%8D%E5%90%8C%E7%9B%AE%E5%BD%95%E9%87%8C%E9%9D%A2%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%B9%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text">2、模板放在不同目录里面的配置方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81gin-%E6%A8%A1%E6%9D%BF%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">3、gin 模板基本语法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E8%BE%93%E5%87%BA%E6%95%B0%E6%8D%AE"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 { {.} }输出数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E6%B3%A8%E9%87%8A"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 注释</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E5%8F%98%E9%87%8F"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E7%A7%BB%E9%99%A4%E7%A9%BA%E6%A0%BC"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 移除空格</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-%E6%AF%94%E8%BE%83%E5%87%BD%E6%95%B0"><span class="toc-number">3.5.</span> <span class="toc-text">3.5 比较函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%AD"><span class="toc-number">3.6.</span> <span class="toc-text">3.6 条件判断</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-7-range"><span class="toc-number">3.7.</span> <span class="toc-text">3.7 range</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-8-with"><span class="toc-number">3.8.</span> <span class="toc-text">3.8 with</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-9-%E9%A2%84%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0"><span class="toc-number">3.9.</span> <span class="toc-text">3.9 预定义函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-10-%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A8%A1%E6%9D%BF%E5%87%BD%E6%95%B0"><span class="toc-number">3.10.</span> <span class="toc-text">3.10 自定义模板函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%B5%8C%E5%A5%97temlpate"><span class="toc-number">4.</span> <span class="toc-text">4 嵌套temlpate</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/12/23/Go/Gin/01%20Gin%E6%A1%86%E6%9E%B6%E7%AE%80%E4%BB%8B/" title="Gin框架简介"><img src="https://img0.baidu.com/it/u=2805562940,1575021077&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=500&amp;h=667" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Gin框架简介"></a><div class="content"><a class="title" href="/2021/12/23/Go/Gin/01%20Gin%E6%A1%86%E6%9E%B6%E7%AE%80%E4%BB%8B/" title="Gin框架简介">Gin框架简介</a><time datetime="2021-12-23T12:49:00.000Z" title="发表于 2021-12-23 20:49:00">2021-12-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/12/23/Go/Gin/02%20golang%20%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%83%AD%E5%8A%A0%E8%BD%BD/" title="golang程序的热加载"><img src="https://img0.baidu.com/it/u=2805562940,1575021077&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=500&amp;h=667" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="golang程序的热加载"></a><div class="content"><a class="title" href="/2021/12/23/Go/Gin/02%20golang%20%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%83%AD%E5%8A%A0%E8%BD%BD/" title="golang程序的热加载">golang程序的热加载</a><time datetime="2021-12-23T12:48:00.000Z" title="发表于 2021-12-23 20:48:00">2021-12-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/12/23/Go/Gin/03%20Gin%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%B7%AF%E7%94%B1/" title="Gin框架中的路由"><img src="https://img0.baidu.com/it/u=2805562940,1575021077&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=500&amp;h=667" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Gin框架中的路由"></a><div class="content"><a class="title" href="/2021/12/23/Go/Gin/03%20Gin%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%B7%AF%E7%94%B1/" title="Gin框架中的路由">Gin框架中的路由</a><time datetime="2021-12-23T12:47:00.000Z" title="发表于 2021-12-23 20:47:00">2021-12-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/12/23/Go/Gin/04%20Gin%20HTML%20%E6%A8%A1%E6%9D%BF%E6%B8%B2%E6%9F%93/" title="Gin HTML 模板渲染"><img src="https://img0.baidu.com/it/u=2805562940,1575021077&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=500&amp;h=667" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Gin HTML 模板渲染"></a><div class="content"><a class="title" href="/2021/12/23/Go/Gin/04%20Gin%20HTML%20%E6%A8%A1%E6%9D%BF%E6%B8%B2%E6%9F%93/" title="Gin HTML 模板渲染">Gin HTML 模板渲染</a><time datetime="2021-12-23T12:46:00.000Z" title="发表于 2021-12-23 20:46:00">2021-12-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/12/23/Go/Gin/05%20%E9%9D%99%E6%80%81%E6%96%87%E4%BB%B6%E6%9C%8D%E5%8A%A1/" title="静态文件服务"><img src="https://img0.baidu.com/it/u=2805562940,1575021077&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=500&amp;h=667" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="静态文件服务"></a><div class="content"><a class="title" href="/2021/12/23/Go/Gin/05%20%E9%9D%99%E6%80%81%E6%96%87%E4%BB%B6%E6%9C%8D%E5%8A%A1/" title="静态文件服务">静态文件服务</a><time datetime="2021-12-23T12:45:00.000Z" title="发表于 2021-12-23 20:45:00">2021-12-23</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent"><div id="footer-wrap"><div class="copyright">©2020 - 2021 <i id="heartbeat" class="fa fas fa-heartbeat"></i>  John Doe</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my <a href="">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="translateLink" type="button" title="简繁转换">简</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="algolia-search"><div class="search-dialog"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="/js/search/algolia.js"></script><div class="js-pjax"><script async="async">var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',()=> {preloader.endLoading()})
+setTimeout(function(){preloader.endLoading();}, 3000);</script></div><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '',
+      appKey: '',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script src="/js/timing.js"></script><script src="https://cdn.jsdelivr.net/gh/weilain/cdn-photo/js/jquery.min.js"></script><script async="" data-pjax="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script type="text/javascript" src="/js/crash_cheat.js"></script></body></html>

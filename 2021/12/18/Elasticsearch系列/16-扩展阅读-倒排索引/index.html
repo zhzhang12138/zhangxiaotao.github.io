@@ -1,0 +1,339 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Elasticsearch之扩展阅读-倒排索引 | John Doe</title><meta name="keywords" content="ElasticSearch"><meta name="author" content="John Doe"><meta name="copyright" content="John Doe"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="随着央视诗词大会的热播，小史开始对诗词感兴趣，最喜欢的就是飞花令的环节。  但是由于小史很久没有背过诗词了，飞一个字很难说出一句，很多之前很熟悉的诗句也想不起来。           倒排索引       吕老师：但是我让你说出带“前”字的诗句，由于没有索引，你只能遍历脑海中所有诗词，当你的脑海中诗词量大的时候，就很难在短时间内得到结果了。        索引量爆炸">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Elasticsearch之扩展阅读-倒排索引">
+<meta property="og:url" content="http://www.zhangxiaotao.live/2021/12/18/Elasticsearch%E7%B3%BB%E5%88%97/16-%E6%89%A9%E5%B1%95%E9%98%85%E8%AF%BB-%E5%80%92%E6%8E%92%E7%B4%A2%E5%BC%95/index.html">
+<meta property="og:site_name" content="John Doe">
+<meta property="og:description" content="随着央视诗词大会的热播，小史开始对诗词感兴趣，最喜欢的就是飞花令的环节。  但是由于小史很久没有背过诗词了，飞一个字很难说出一句，很多之前很熟悉的诗句也想不起来。           倒排索引       吕老师：但是我让你说出带“前”字的诗句，由于没有索引，你只能遍历脑海中所有诗词，当你的脑海中诗词量大的时候，就很难在短时间内得到结果了。        索引量爆炸">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/typora/ElasticSearch.jpeg">
+<meta property="article:published_time" content="2021-12-18T01:28:00.000Z">
+<meta property="article:modified_time" content="2021-12-18T02:00:25.598Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="ElasticSearch">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/typora/ElasticSearch.jpeg"><link rel="shortcut icon" href="/img/avatar.png"><link rel="canonical" href="http://www.zhangxiaotao.live/2021/12/18/Elasticsearch%E7%B3%BB%E5%88%97/16-%E6%89%A9%E5%B1%95%E9%98%85%E8%AF%BB-%E5%80%92%E6%8E%92%E7%B4%A2%E5%BC%95/"><link rel="preconnect" href="//cdn.jsdelivr.net"><link rel="preconnect" href="//busuanzi.ibruce.info"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer=""></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: {"appId":"B0YYEXE704","apiKey":"df3b5032cce15f8c2fe870edf0ff7d98","indexName":"blog","hits":{"per_page":10},"languages":{"input_placeholder":"搜索文章","hits_empty":"找不到您查询的内容：${query}","hits_stats":"找到 ${hits} 条结果，用时 ${time} 毫秒"}},
+  localSearch: undefined,
+  translate: {"defaultEncoding":1,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":500},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Elasticsearch之扩展阅读-倒排索引',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2021-12-18 10:00:25'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/mouse.css"><style>#article-container.post-content h1:before, h2:before, h3:before, h4:before, h5:before, h6:before { -webkit-animation: avatar_turn_around 1s linear infinite; -moz-animation: avatar_turn_around 1s linear infinite; -o-animation: avatar_turn_around 1s linear infinite; -ms-animation: avatar_turn_around 1s linear infinite; animation: avatar_turn_around 1s linear infinite; }</style><link rel="stylesheet" href="/css/copyright.css"><link rel="stylesheet" href="/css/modify.styl"><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/HCLonely/images@master/others/heartbeat.min.css"><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="wizard-scene"><div class="wizard-objects"><div class="wizard-square"></div><div class="wizard-circle"></div><div class="wizard-triangle"></div></div><div class="wizard"><div class="wizard-body"></div><div class="wizard-right-arm"><div class="wizard-right-hand"></div></div><div class="wizard-left-arm"><div class="wizard-left-hand"></div></div><div class="wizard-head"><div class="wizard-beard"></div><div class="wizard-face"><div class="wizard-adds"></div></div><div class="wizard-hat"><div class="wizard-hat-of-the-hat"></div><div class="wizard-four-point-star --first"></div><div class="wizard-four-point-star --second"></div><div class="wizard-four-point-star --third"></div></div></div></div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/typora/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">264</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">28</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">28</div></a></div></div></div><hr><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background: transparent"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">John Doe</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Elasticsearch之扩展阅读-倒排索引</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-12-18T01:28:00.000Z" title="发表于 2021-12-18 09:28:00">2021-12-18</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-12-18T02:00:25.598Z" title="更新于 2021-12-18 10:00:25">2021-12-18</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/ElasticSearch/">ElasticSearch</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Elasticsearch之扩展阅读-倒排索引"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>随着央视诗词大会的热播，小史开始对诗词感兴趣，最喜欢的就是飞花令的环节。</p>
+<p><img src="https://pic2.zhimg.com/80/v2-5228b0a4ad31e39b9b731044085426f9_hd.jpg" alt="img"></p>
+<p>但是由于小史很久没有背过诗词了，飞一个字很难说出一句，很多之前很熟悉的诗句也想不起来。</p>
+<p><img src="https://pic3.zhimg.com/80/v2-280b7ab44c3f4e8b8a48000fdc9b7e6e_hd.jpg" alt="img"></p>
+<p><img src="https://pic2.zhimg.com/80/v2-def705467a1fc78311bdd0e746de76a1_hd.jpg" alt="img"></p>
+<p><img src="https://pic1.zhimg.com/80/v2-213a96e616c2f5bf6de0fed96cdc4bfc_hd.jpg" alt="img"></p>
+<p><img src="https://pic4.zhimg.com/80/v2-e8ec11557e537d46c39e85f566b3e0c3_hd.jpg" alt="img"></p>
+<p><img src="https://pic2.zhimg.com/80/v2-db9f8919ab6e563c97f2ebf295af227d_hd.jpg" alt="img"></p>
+<p><img src="https://pic1.zhimg.com/80/v2-e28d0e3e54ae2f9c0faa18a05e2ba934_hd.jpg" alt="img"></p>
+<p><img src="https://pic2.zhimg.com/80/v2-7938aff727bedac3dea1d88297235475_hd.jpg" alt="img"></p>
+<p><img src="https://pic4.zhimg.com/80/v2-7cde8e1cdc5866dae381a3957ccde57f_hd.jpg" alt="img"></p>
+<p><img src="https://pic4.zhimg.com/80/v2-cb0626c05647361e033f2a0ab4f779bb_hd.jpg" alt="img"></p>
+<p><img src="https://pic4.zhimg.com/80/v2-cad16f954ef40e1c18fa4e52b070e647_hd.jpg" alt="img"></p>
+<p><strong>倒排索引</strong></p>
+<p><img src="https://pic3.zhimg.com/80/v2-8ec0b0da336ab8abf9932b90b9f9811e_hd.jpg" alt="img"></p>
+<p><img src="https://pic1.zhimg.com/80/v2-d4b5505fc53c6dd793695c82a84da884_hd.jpg" alt="img"></p>
+<p><img src="https://pic1.zhimg.com/80/v2-5b4afa42eb818cb1597798c186211868_hd.jpg" alt="img"></p>
+<p><img src="https://pic1.zhimg.com/80/v2-f180f28669673936d3754bb343a29078_hd.jpg" alt="img"></p>
+<p><img src="https://pic3.zhimg.com/80/v2-1f6267412401d52292e93b216f1a29ae_hd.jpg" alt="img"></p>
+<p><img src="https://pic1.zhimg.com/80/v2-09d80e27b9c735b3e5dfa48926b3ad38_hd.jpg" alt="img"></p>
+<p><strong>吕老师：</strong>但是我让你说出带“前”字的诗句，由于没有索引，你只能遍历脑海中所有诗词，当你的脑海中诗词量大的时候，就很难在短时间内得到结果了。</p>
+<p><img src="https://pic4.zhimg.com/80/v2-c177e6781bdd53c06baba54e40f3d5e3_hd.jpg" alt="img"></p>
+<p><img src="https://pic3.zhimg.com/80/v2-7377d47938ffab9b49e13f25ff0d03b2_hd.jpg" alt="img"></p>
+<p><img src="https://pic4.zhimg.com/80/v2-fd6276182c73bda022aebbe17f07e47f_hd.jpg" alt="img"></p>
+<p><img src="https://pic3.zhimg.com/80/v2-ee45432b984d48ad04b6673bc3fb536e_hd.jpg" alt="img"></p>
+<p><img src="https://pic2.zhimg.com/80/v2-c803bc3a21d8558d47219c0daaa49309_hd.jpg" alt="img"></p>
+<p><img src="https://pic1.zhimg.com/80/v2-6ecdea9437561f66a8f0fe89ebd57020_hd.jpg" alt="img"></p>
+<p><img src="https://pic4.zhimg.com/80/v2-d8db0996eb9adadc34b28581699829bb_hd.jpg" alt="img"></p>
+<p><strong>索引量爆炸</strong></p>
+<p><img src="https://pic4.zhimg.com/80/v2-ed850c291b0b51ffd51232ce2b306ed3_hd.jpg" alt="img"></p>
+<p><img src="https://pic3.zhimg.com/80/v2-215645eb9bf0914e4a12fc17cab9b306_hd.jpg" alt="img"></p>
+<p><img src="https://pic3.zhimg.com/80/v2-3388d6dcf0a21c8278e881d369e1f31a_hd.jpg" alt="img"></p>
+<p><img src="https://pic2.zhimg.com/80/v2-499a8eb7a79dcd525a05b73e0253852d_hd.jpg" alt="img"></p>
+<p><img src="https://pic4.zhimg.com/80/v2-7c28ef4bfdcfe8e9873cfd8c61f69b6b_hd.jpg" alt="img"></p>
+<p><img src="https://pic2.zhimg.com/80/v2-83b2acab0ed6fcce1f07bc4ec6338d1d_hd.jpg" alt="img"></p>
+<p><img src="https://pic2.zhimg.com/80/v2-d639d0ef78264ea66899f11da9bd004d_hd.jpg" alt="img"></p>
+<p><img src="https://pic3.zhimg.com/80/v2-e5580feed3fe5e714736313fd8309bce_hd.jpg" alt="img"></p>
+<p><img src="https://pic2.zhimg.com/80/v2-21a0d93b2816b2c83ae335db99438e71_hd.jpg" alt="img"></p>
+<p><img src="https://pic3.zhimg.com/80/v2-dc71c47cffd58f180b0355713bdc72ca_hd.jpg" alt="img"></p>
+<p><img src="https://pic3.zhimg.com/80/v2-96da7202725c62c3d234be6fcc85480e_hd.jpg" alt="img"></p>
+<p><img src="https://pic1.zhimg.com/80/v2-d1ecdbae17586f1e21f65324d04ed7ac_hd.jpg" alt="img"></p>
+<p><img src="https://pic2.zhimg.com/80/v2-b4726e6972818ac46250e54682c0f939_hd.jpg" alt="img"></p>
+<p><img src="https://pic1.zhimg.com/80/v2-9ec9f32b71e22980978a2626b68167ac_hd.jpg" alt="img"></p>
+<p><img src="https://pic1.zhimg.com/80/v2-418b06473996de90a416f30b56245d8c_hd.jpg" alt="img"></p>
+<p><img src="https://pic2.zhimg.com/80/v2-22ddabc7f1b02260e4f1fa10bafa509d_hd.jpg" alt="img"></p>
+<p><img src="https://pic2.zhimg.com/80/v2-949fc2f3c8427d41589733b3cf98697d_hd.jpg" alt="img"></p>
+<p><img src="https://pic4.zhimg.com/80/v2-48ec5853f184655c487e5d070005d3af_hd.jpg" alt="img"></p>
+<p><img src="https://pic2.zhimg.com/80/v2-a0a23507caca6e22b6a1d3eca7bf67d9_hd.jpg" alt="img"></p>
+<p><strong>搜索引擎原理</strong></p>
+<p><img src="https://pic2.zhimg.com/80/v2-eeefe2669de4ee10d9ad0fb492bb9fe5_hd.jpg" alt="img"></p>
+<p><img src="https://pic2.zhimg.com/80/v2-c88b7b533f3821cce041cfd177d08d3d_hd.jpg" alt="img"></p>
+<p><img src="https://pic2.zhimg.com/80/v2-6894533d32bfc7c142ff3b06695f1bc1_hd.jpg" alt="img"></p>
+<p><img src="https://pic1.zhimg.com/80/v2-6be627794c85dbee98021a654cf4e2a4_hd.jpg" alt="img"></p>
+<p><img src="https://pic4.zhimg.com/80/v2-2a5889d293f8147193b4d1a832656713_hd.jpg" alt="img"></p>
+<p><img src="https://pic2.zhimg.com/80/v2-25eafa285109ad9fbf9c66ff86756429_hd.jpg" alt="img"></p>
+<p><img src="https://pic4.zhimg.com/80/v2-c3d0c44de959ddf31b26a069ec8893ef_hd.jpg" alt="img"></p>
+<p><img src="https://pic1.zhimg.com/80/v2-f3168f6ef74186c3f3905bbdba1bc434_hd.jpg" alt="img"></p>
+<p><img src="https://pic2.zhimg.com/80/v2-5306b7be95032503bafe9c8d4a5e7d39_hd.jpg" alt="img"></p>
+<p><img src="https://pic2.zhimg.com/80/v2-9306b11457eb769ea72a9c7a85d615e1_hd.jpg" alt="img"></p>
+<p><img src="https://pic3.zhimg.com/80/v2-4962264f39e89c9825a4d906271b4e3e_hd.jpg" alt="img"></p>
+<p><img src="https://pic3.zhimg.com/80/v2-b1c49ee21caaa76b3ab1d19e1b61fc66_hd.jpg" alt="img"></p>
+<p><img src="https://pic4.zhimg.com/80/v2-1da4339c8e3d2721823cab6cf84183a7_hd.jpg" alt="img"></p>
+<p><img src="https://pic4.zhimg.com/80/v2-4d63ccecb5d53a951f0ed3cda1321267_hd.jpg" alt="img"></p>
+<p><img src="https://pic3.zhimg.com/80/v2-ec368c121b4dc74b069e001d98cab836_hd.jpg" alt="img"></p>
+<p><strong>Elasticsearch 简介</strong></p>
+<p><img src="https://pic2.zhimg.com/80/v2-07f415f308049708123a27b9de263415_hd.jpg" alt="img"></p>
+<p><img src="https://pic3.zhimg.com/80/v2-4f4507aa008f4fcbbad0acc6dc202efa_hd.jpg" alt="img"></p>
+<p><img src="https://pic3.zhimg.com/80/v2-1280aa01af7bf7c25e8ee50721c3028e_hd.jpg" alt="img"></p>
+<p><img src="https://pic1.zhimg.com/80/v2-735711c52660b5e282bd1257991c1df8_hd.jpg" alt="img"></p>
+<p><img src="https://pic3.zhimg.com/80/v2-4b1c0467ba842cb05e2f7ba217158e1e_hd.jpg" alt="img"></p>
+<p><strong>吕老师：</strong>但是 Lucene 还是一个库，必须要懂一点搜索引擎原理的人才能用的好，所以后来又有人基于 Lucene 进行封装，写出了 Elasticsearch。</p>
+<p><img src="https://pic4.zhimg.com/80/v2-64894289738f789839753831ce18ddcf_hd.jpg" alt="img"></p>
+<p><img src="https://pic4.zhimg.com/80/v2-4f36c0d5c4483cb0306e1bafd3d946eb_hd.jpg" alt="img"></p>
+<p><img src="https://pic4.zhimg.com/80/v2-19bb767a4743d87281d5463b0c03ce43_hd.jpg" alt="img"></p>
+<p><img src="https://pic3.zhimg.com/80/v2-ea3933f1d1dda0eaf7025cf5852240fa_hd.jpg" alt="img"></p>
+<p><img src="https://pic1.zhimg.com/80/v2-a7e9078dd2f91ab8d996bcb7427a9d4c_hd.jpg" alt="img"></p>
+<p><img src="https://pic2.zhimg.com/80/v2-4ee7ca992fb19d055b2428f1bb08cb91_hd.jpg" alt="img"></p>
+<p><strong>Elasticsearch 基本概念</strong></p>
+<p><img src="https://pic1.zhimg.com/80/v2-328809d09498d1da1eeb96ca28b3f208_hd.jpg" alt="img"></p>
+<p><img src="https://pic3.zhimg.com/80/v2-b5a6834c5ce28d9917b3c4e73a646146_hd.jpg" alt="img"></p>
+<p><img src="https://pic2.zhimg.com/80/v2-47845232d4a753d76364fcbbe4e37631_hd.jpg" alt="img"></p>
+<p><img src="https://pic1.zhimg.com/80/v2-6ac957659142d3d9787cc2a055456df0_hd.jpg" alt="img"></p>
+<p><img src="https://pic2.zhimg.com/80/v2-0034f2976c9adb1bbefb062ce8532be1_hd.jpg" alt="img"></p>
+<p><strong>吕老师：</strong>类型是用来定义数据结构的，你可以认为是 MySQL 中的一张表。文档就是最终的数据了，你可以认为一个文档就是一条记录。</p>
+<p><img src="https://pic4.zhimg.com/80/v2-7290f618429029f5fbdd7475fbd469c7_hd.jpg" alt="img"></p>
+<p><img src="https://pic1.zhimg.com/80/v2-64ec15aae5d926c07e3a788925e56c10_hd.jpg" alt="img"></p>
+<p><img src="https://pic3.zhimg.com/80/v2-416ad2d83b1f5ad573c60543d286c0da_hd.jpg" alt="img"></p>
+<p><strong>吕老师：</strong>比如一首诗，有诗题、作者、朝代、字数、诗内容等字段，那么首先，我们可以建立一个名叫 Poems 的索引，然后创建一个名叫 Poem 的类型，类型是通过 Mapping 来定义每个字段的类型。</p>
+<p>比如诗题、作者、朝代都是 Keyword 类型，诗内容是 Text 类型，而字数是 Integer 类型，最后就是把数据组织成 Json 格式存放进去了。</p>
+<p><img src="https://pic1.zhimg.com/80/v2-1897d394e89794a9776d83e47ec3da98_hd.jpg" alt="img"></p>
+<p><img src="https://pic4.zhimg.com/80/v2-8add22f70cd54238ab461380cc0adef3_hd.jpg" alt="img"></p>
+<p><img src="https://pic3.zhimg.com/80/v2-857fb40d14e66653bfd487f71f6b82e2_hd.jpg" alt="img"></p>
+<p><strong>吕老师：</strong>这个问题问得好，这涉及到分词的问题，Keyword 类型是不会分词的，直接根据字符串内容建立反向索引，Text 类型在存入 Elasticsearch 的时候，会先分词，然后根据分词后的内容建立反向索引。</p>
+<p><img src="https://pic1.zhimg.com/80/v2-3dbfc23c1aa4cbda9428ca104e771a38_hd.jpg" alt="img"></p>
+<p><img src="https://pic3.zhimg.com/80/v2-b1e0b6dbfd4465fe07e53afe0ad2fd42_hd.jpg" alt="img"></p>
+<p><img src="https://pic3.zhimg.com/80/v2-511e081c2a08a01c8edf30d6e01ee7a6_hd.jpg" alt="img"></p>
+<p><strong>吕老师：</strong>之前我们说过，Elasticsearch 把操作都封装成了 HTTP 的 API，我们只要给 Elasticsearch 发送 HTTP 请求就行。</p>
+<p>比如使用 curl -XPUT ‘<a href="https://link.zhihu.com/?target=http://ip">http://ip</a>:port/poems’，就能建立一个名为 Poems 的索引，其他操作也是类似的。</p>
+<p><img src="https://pic2.zhimg.com/80/v2-2ab73675d30fc2658d6ca21eafdf1c61_hd.jpg" alt="img"></p>
+<p><strong>Elasticsearch 分布式原理</strong></p>
+<p><img src="https://pic3.zhimg.com/80/v2-e57359d3a25af8fd744c6ca3e15e15da_hd.jpg" alt="img"></p>
+<p><img src="https://pic3.zhimg.com/80/v2-5e34cae2f4e05bc639812494afe17a96_hd.jpg" alt="img"></p>
+<p><strong>吕老师：</strong>没错，Elasticsearch 也是会对数据进行切分，同时每一个分片会保存多个副本，其原因和 HDFS 是一样的，都是为了保证分布式环境下的高可用。</p>
+<p><img src="https://pic3.zhimg.com/80/v2-43e459084a161beff1791f57345e4966_hd.jpg" alt="img"></p>
+<p><img src="https://pic3.zhimg.com/80/v2-cd85b49fde2984c42c9a6afa0959564a_hd.jpg" alt="img"></p>
+<p><img src="https://pic4.zhimg.com/80/v2-111fa7d3a88637c974a6f8db28ff3457_hd.jpg" alt="img"></p>
+<p><strong>吕老师：</strong>没错，在 Elasticsearch 中，节点是对等的，节点间会通过自己的一些规则选取集群的 Master，Master 会负责集群状态信息的改变，并同步给其他节点。</p>
+<p><img src="https://pic4.zhimg.com/80/v2-e3a489113b722705b6adbd7a72aa052b_hd.jpg" alt="img"></p>
+<p><img src="https://pic4.zhimg.com/80/v2-346b1ecc1723bccbb5e3f56b41f8f3c7_hd.jpg" alt="img"></p>
+<p><img src="https://pic4.zhimg.com/80/v2-1f758edf1d868d0631ccf54b1052b0e3_hd.jpg" alt="img"></p>
+<p><img src="https://pic4.zhimg.com/80/v2-d71b92cbf7d9272068602e9442fd20db_hd.jpg" alt="img"></p>
+<p><img src="https://pic3.zhimg.com/80/v2-4e5b3eb17cae9985fcca60cf223e2f16_hd.jpg" alt="img"></p>
+<p><strong>吕老师：</strong>注意，只有建立索引和类型需要经过 Master，数据的写入有一个简单的 Routing 规则，可以 Route 到集群中的任意节点，所以数据写入压力是分散在整个集群的。</p>
+<p><img src="https://pic3.zhimg.com/80/v2-5cb0eb47ff98e11782283f6ce1c997f6_hd.jpg" alt="img"></p>
+<p><strong>ELK 系统</strong></p>
+<p><img src="https://pic4.zhimg.com/80/v2-956e6b35a83b4e8e6884e8c011e8f153_hd.jpg" alt="img"></p>
+<p><img src="https://pic4.zhimg.com/80/v2-7c3a30bc816d898fe62248b49212088b_hd.jpg" alt="img"></p>
+<p><strong>吕老师：</strong>其实很多公司都用 Elasticsearch 搭建 ELK 系统，也就是日志分析系统。其中 E 就是 Elasticsearch，L 是 Logstash，是一个日志收集系统，K 是 Kibana，是一个数据可视化平台。</p>
+<p><img src="https://pic1.zhimg.com/80/v2-e68267289f6f73bb352c50e7b148cb6c_hd.jpg" alt="img"></p>
+<p><img src="https://pic1.zhimg.com/80/v2-a1e3d18990a1690d3ff4e7364be08bdc_hd.jpg" alt="img"></p>
+<p><img src="https://pic3.zhimg.com/80/v2-1b535771a532c7179817d8072885a066_hd.jpg" alt="img"></p>
+<p><strong>吕老师：</strong>分析日志的用处可大了，你想，假如一个分布式系统有 1000 台机器，系统出现故障时，我要看下日志，还得一台一台登录上去查看，是不是非常麻烦？</p>
+<p><img src="https://pic3.zhimg.com/80/v2-8829653d55c64ac8af08001e2fbb421a_hd.jpg" alt="img"></p>
+<p><img src="https://pic4.zhimg.com/80/v2-0176b33be901e992f9cc22fb8fac322f_hd.jpg" alt="img"></p>
+<p><strong>吕老师：</strong>但是如果日志接入了 ELK 系统就不一样。比如系统运行过程中，突然出现了异常，在日志中就能及时反馈，日志进入 ELK 系统中，我们直接在 Kibana 就能看到日志情况。如果再接入一些实时计算模块，还能做实时报警功能。</p>
+<p><img src="https://pic4.zhimg.com/80/v2-23d0a8aa318cea3201664d835b451693_hd.jpg" alt="img"></p>
+<p><img src="https://pic1.zhimg.com/80/v2-69d240d9468895c392a290e58aba15fc_hd.jpg" alt="img"></p>
+<p><img src="https://pic1.zhimg.com/80/v2-b8906defdfa9684d1032afef361aff70_hd.jpg" alt="img"></p>
+<p><strong>搜索引擎原理</strong></p>
+<p>小史学完了 Elasticsearch，在笔记本上写下了如下记录：</p>
+<ul>
+<li>反向索引又叫倒排索引，是根据文章内容中的关键字建立索引。</li>
+<li>搜索引擎原理就是建立反向索引。</li>
+<li>Elasticsearch 在 Lucene 的基础上进行封装，实现了分布式搜索引擎。</li>
+<li>Elasticsearch 中的索引、类型和文档的概念比较重要，类似于 MySQL 中的数据库、表和行。</li>
+<li>Elasticsearch 也是 Master-slave 架构，也实现了数据的分片和备份。</li>
+<li>Elasticsearch 一个典型应用就是 ELK 日志分析系统。</li>
+</ul>
+<p>写完，又高高兴兴背诗去了。</p>
+</article><div class="post-copyright"><div class="post-copyright__title"><span class="post-copyright-info"><h>Elasticsearch之扩展阅读-倒排索引</h></span></div><div class="post-copyright__type"><span class="post-copyright-info"><a href="http://www.zhangxiaotao.live/2021/12/18/Elasticsearch%E7%B3%BB%E5%88%97/16-%E6%89%A9%E5%B1%95%E9%98%85%E8%AF%BB-%E5%80%92%E6%8E%92%E7%B4%A2%E5%BC%95/">http://www.zhangxiaotao.live/2021/12/18/Elasticsearch%E7%B3%BB%E5%88%97/16-%E6%89%A9%E5%B1%95%E9%98%85%E8%AF%BB-%E5%80%92%E6%8E%92%E7%B4%A2%E5%BC%95/</a></span></div><div class="post-copyright-m"><div class="post-copyright-m-info"><div class="post-copyright-a" style="display: inline-block;width: 120px"><h>作者</h><div class="post-copyright-cc-info"><h>John Doe</h></div></div><div class="post-copyright-c" style="display: inline-block;width: 120px"><h>发布于</h><div class="post-copyright-cc-info"><h>2021-12-18</h></div></div><div class="post-copyright-u" style="display: inline-block;width: 120px"><h>更新于</h><div class="post-copyright-cc-info"><h>2021-12-18</h></div></div><div class="post-copyright-c" style="display: inline-block;width: 120px"><h>许可协议</h><div class="post-copyright-cc-info"><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a rel="noopener" target="_blank" title="CC BY 4.0" href="https://creativecommons.org/licenses/by/4.0/deed.zh">CC BY 4.0</a></div></div></div></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/ElasticSearch/">ElasticSearch</a></div><div class="post_share"><div class="social-share" data-image="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/typora/ElasticSearch.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer=""></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/12/18/Elasticsearch%E7%B3%BB%E5%88%97/15-Elasticsearch%E9%AB%98%E7%BA%A7%E4%B9%8B-%E4%BD%8D%E7%BD%AE%E5%9D%90%E6%A0%87%E5%AE%9E%E7%8E%B0%E9%99%84%E8%BF%91%E7%9A%84%E4%BA%BA%E6%90%9C%E7%B4%A2/"><img class="prev-cover" src="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/typora/ElasticSearch.jpeg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Elasticsearch高级之位置坐标实现附近的人搜索</div></div></a></div><div class="next-post pull-right"><a href="/2021/12/18/Elasticsearch%E7%B3%BB%E5%88%97/17-%E6%89%A9%E5%B1%95%E9%98%85%E8%AF%BB-%E5%88%A0%E9%99%A4%E6%98%A0%E5%B0%84%E7%B1%BB%E5%9E%8B/"><img class="next-cover" src="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/typora/ElasticSearch.jpeg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Elasticsearch之扩展阅读-删除映射类型</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/12/18/Elasticsearch%E7%B3%BB%E5%88%97/01-ElasticSearch%E4%B9%8B-%E5%AE%89%E8%A3%85/" title="ElasticSearch之安装"><img class="cover" src="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/typora/ElasticSearch.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-18</div><div class="title">ElasticSearch之安装</div></div></a></div><div><a href="/2021/12/18/Elasticsearch%E7%B3%BB%E5%88%97/00%20ElasticSearch%E4%B9%8B-%E4%BB%8B%E7%BB%8D/" title="ElasticSearch之介绍"><img class="cover" src="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/typora/ElasticSearch.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-18</div><div class="title">ElasticSearch之介绍</div></div></a></div><div><a href="/2021/12/18/Elasticsearch%E7%B3%BB%E5%88%97/02-ElasticSearch%E4%B9%8B-%E6%8F%92%E4%BB%B6%E4%BB%8B%E7%BB%8D/" title="ElasticSearch之插件介绍"><img class="cover" src="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/typora/ElasticSearch.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-18</div><div class="title">ElasticSearch之插件介绍</div></div></a></div><div><a href="/2021/12/18/Elasticsearch%E7%B3%BB%E5%88%97/03-01%20ElasticSearch%E4%B9%8B-ElasticSearch-head/" title="ElasticSearch之ElasticSearch-head"><img class="cover" src="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/typora/ElasticSearch.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-18</div><div class="title">ElasticSearch之ElasticSearch-head</div></div></a></div><div><a href="/2021/12/18/Elasticsearch%E7%B3%BB%E5%88%97/03-02%20%E5%AE%89%E8%A3%85nodejs/" title="安装nodejs"><img class="cover" src="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/typora/ElasticSearch.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-18</div><div class="title">安装nodejs</div></div></a></div><div><a href="/2021/12/18/Elasticsearch%E7%B3%BB%E5%88%97/04-ElasticSearch%E4%B9%8B-%E5%AE%89%E8%A3%85Kibana/" title="ElasticSearch之安装Kibana"><img class="cover" src="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/typora/ElasticSearch.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-18</div><div class="title">ElasticSearch之安装Kibana</div></div></a></div></div></div><hr><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/typora/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"></div><div class="author-info__name">John Doe</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">264</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">28</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">28</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/zhzhang12138"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my blog   <img src="https://cdn.jsdelivr.net/gh/CNhuazhu/Image/pig.gif"></div><timing></timing></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/12/23/Go/Gin/01%20Gin%E6%A1%86%E6%9E%B6%E7%AE%80%E4%BB%8B/" title="Gin框架简介"><img src="https://img0.baidu.com/it/u=2805562940,1575021077&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=500&amp;h=667" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Gin框架简介"></a><div class="content"><a class="title" href="/2021/12/23/Go/Gin/01%20Gin%E6%A1%86%E6%9E%B6%E7%AE%80%E4%BB%8B/" title="Gin框架简介">Gin框架简介</a><time datetime="2021-12-23T12:49:00.000Z" title="发表于 2021-12-23 20:49:00">2021-12-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/12/23/Go/Gin/02%20golang%20%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%83%AD%E5%8A%A0%E8%BD%BD/" title="golang程序的热加载"><img src="https://img0.baidu.com/it/u=2805562940,1575021077&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=500&amp;h=667" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="golang程序的热加载"></a><div class="content"><a class="title" href="/2021/12/23/Go/Gin/02%20golang%20%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%83%AD%E5%8A%A0%E8%BD%BD/" title="golang程序的热加载">golang程序的热加载</a><time datetime="2021-12-23T12:48:00.000Z" title="发表于 2021-12-23 20:48:00">2021-12-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/12/23/Go/Gin/03%20Gin%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%B7%AF%E7%94%B1/" title="Gin框架中的路由"><img src="https://img0.baidu.com/it/u=2805562940,1575021077&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=500&amp;h=667" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Gin框架中的路由"></a><div class="content"><a class="title" href="/2021/12/23/Go/Gin/03%20Gin%E6%A1%86%E6%9E%B6%E4%B8%AD%E7%9A%84%E8%B7%AF%E7%94%B1/" title="Gin框架中的路由">Gin框架中的路由</a><time datetime="2021-12-23T12:47:00.000Z" title="发表于 2021-12-23 20:47:00">2021-12-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/12/23/Go/Gin/04%20Gin%20HTML%20%E6%A8%A1%E6%9D%BF%E6%B8%B2%E6%9F%93/" title="Gin HTML 模板渲染"><img src="https://img0.baidu.com/it/u=2805562940,1575021077&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=500&amp;h=667" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Gin HTML 模板渲染"></a><div class="content"><a class="title" href="/2021/12/23/Go/Gin/04%20Gin%20HTML%20%E6%A8%A1%E6%9D%BF%E6%B8%B2%E6%9F%93/" title="Gin HTML 模板渲染">Gin HTML 模板渲染</a><time datetime="2021-12-23T12:46:00.000Z" title="发表于 2021-12-23 20:46:00">2021-12-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/12/23/Go/Gin/05%20%E9%9D%99%E6%80%81%E6%96%87%E4%BB%B6%E6%9C%8D%E5%8A%A1/" title="静态文件服务"><img src="https://img0.baidu.com/it/u=2805562940,1575021077&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=500&amp;h=667" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="静态文件服务"></a><div class="content"><a class="title" href="/2021/12/23/Go/Gin/05%20%E9%9D%99%E6%80%81%E6%96%87%E4%BB%B6%E6%9C%8D%E5%8A%A1/" title="静态文件服务">静态文件服务</a><time datetime="2021-12-23T12:45:00.000Z" title="发表于 2021-12-23 20:45:00">2021-12-23</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent"><div id="footer-wrap"><div class="copyright">©2020 - 2021 <i id="heartbeat" class="fa fas fa-heartbeat"></i>  John Doe</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my <a href="">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="translateLink" type="button" title="简繁转换">简</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="algolia-search"><div class="search-dialog"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="/js/search/algolia.js"></script><div class="js-pjax"><script async="async">var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',()=> {preloader.endLoading()})
+setTimeout(function(){preloader.endLoading();}, 3000);</script></div><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '',
+      appKey: '',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script src="/js/timing.js"></script><script src="https://cdn.jsdelivr.net/gh/weilain/cdn-photo/js/jquery.min.js"></script><script async="" data-pjax="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script type="text/javascript" src="/js/crash_cheat.js"></script></body></html>
