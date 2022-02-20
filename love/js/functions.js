@@ -95,7 +95,7 @@ function startHeartAnimation() {
 
 function timeElapse(date){
 	var current = new Date();
-	var diffDays = Math.ceil((current.getTime() - date.getTime()) / (1000 * 60 * 60 * 24)) - 1;//向上取整
+	var diffDays = Math.ceil((current.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));//向上取整
 	var seconds = (Date.parse(current) - Date.parse(date)) / 1000;
 
 	// var days = Math.floor(seconds / (3600 * 24));
