@@ -1,0 +1,243 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Git 提高效率的命令 | John Doe</title><meta name="keywords" content="Git"><meta name="author" content="John Doe"><meta name="copyright" content="John Doe"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="stash描述官方解释：当您想记录工作目录和索引的当前状态，但又想返回一个干净的工作目录时，请使用git stash。该命令将保存本地修改，并恢复工作目录以匹配头部提交。 stash 命令能够将还未 commit 的代码存起来，让你的工作目录变得干净。 应用场景我猜你心里一定在想：为什么要变干净？ 应用场景：某一天你正在 feature 分支开发新需求，突然产品经理跑过来说线上有bug，必须马上修">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git 提高效率的命令">
+<meta property="og:url" content="http://www.zhangxiaotao.live/2022/06/24/Git/04-Git%20%E6%8F%90%E9%AB%98%E6%95%88%E7%8E%87%E7%9A%84%E5%91%BD%E4%BB%A4/index.html">
+<meta property="og:site_name" content="John Doe">
+<meta property="og:description" content="stash描述官方解释：当您想记录工作目录和索引的当前状态，但又想返回一个干净的工作目录时，请使用git stash。该命令将保存本地修改，并恢复工作目录以匹配头部提交。 stash 命令能够将还未 commit 的代码存起来，让你的工作目录变得干净。 应用场景我猜你心里一定在想：为什么要变干净？ 应用场景：某一天你正在 feature 分支开发新需求，突然产品经理跑过来说线上有bug，必须马上修">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img0.baidu.com/it/u=3798434749,2608261770&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=750&amp;h=500">
+<meta property="article:published_time" content="2022-06-24T09:39:00.000Z">
+<meta property="article:modified_time" content="2022-06-24T09:41:25.068Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="Git">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img0.baidu.com/it/u=3798434749,2608261770&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=750&amp;h=500"><link rel="shortcut icon" href="/img/avatar.png"><link rel="canonical" href="http://www.zhangxiaotao.live/2022/06/24/Git/04-Git%20%E6%8F%90%E9%AB%98%E6%95%88%E7%8E%87%E7%9A%84%E5%91%BD%E4%BB%A4/"><link rel="preconnect" href="//cdn.jsdelivr.net"><link rel="preconnect" href="//busuanzi.ibruce.info"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer=""></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: {"appId":"B0YYEXE704","apiKey":"df3b5032cce15f8c2fe870edf0ff7d98","indexName":"blog","hits":{"per_page":10},"languages":{"input_placeholder":"搜索文章","hits_empty":"找不到您查询的内容：${query}","hits_stats":"找到 ${hits} 条结果，用时 ${time} 毫秒"}},
+  localSearch: undefined,
+  translate: {"defaultEncoding":1,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":500},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Git 提高效率的命令',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-06-24 17:41:25'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/mouse.css"><style>#article-container.post-content h1:before, h2:before, h3:before, h4:before, h5:before, h6:before { -webkit-animation: avatar_turn_around 1s linear infinite; -moz-animation: avatar_turn_around 1s linear infinite; -o-animation: avatar_turn_around 1s linear infinite; -ms-animation: avatar_turn_around 1s linear infinite; animation: avatar_turn_around 1s linear infinite; }</style><link rel="stylesheet" href="/css/copyright.css"><link rel="stylesheet" href="/css/modify.styl"><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/HCLonely/images@master/others/heartbeat.min.css"><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="wizard-scene"><div class="wizard-objects"><div class="wizard-square"></div><div class="wizard-circle"></div><div class="wizard-triangle"></div></div><div class="wizard"><div class="wizard-body"></div><div class="wizard-right-arm"><div class="wizard-right-hand"></div></div><div class="wizard-left-arm"><div class="wizard-left-hand"></div></div><div class="wizard-head"><div class="wizard-beard"></div><div class="wizard-face"><div class="wizard-adds"></div></div><div class="wizard-hat"><div class="wizard-hat-of-the-hat"></div><div class="wizard-four-point-star --first"></div><div class="wizard-four-point-star --second"></div><div class="wizard-four-point-star --third"></div></div></div></div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/typora/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">387</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">38</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">46</div></a></div></div></div><hr><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/love/"><i class="fa-fw fas fa-gift"></i><span> Love</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background: transparent"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">John Doe</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/love/"><i class="fa-fw fas fa-gift"></i><span> Love</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Git 提高效率的命令</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-06-24T09:39:00.000Z" title="发表于 2022-06-24 17:39:00">2022-06-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-06-24T09:41:25.068Z" title="更新于 2022-06-24 17:41:25">2022-06-24</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Git/">Git</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Git 提高效率的命令"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h3 id="stash"><a href="#stash" class="headerlink" title="stash"></a>stash</h3><h4 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h4><p>官方解释：当您想记录工作目录和索引的当前状态，但又想返回一个干净的工作目录时，请使用git stash。该命令将保存本地修改，并恢复工作目录以匹配头部提交。</p>
+<p>stash 命令能够将还未 commit 的代码存起来，让你的工作目录变得干净。</p>
+<h4 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h4><p>我猜你心里一定在想：为什么要变干净？</p>
+<p>应用场景：某一天你正在 feature 分支开发新需求，突然产品经理跑过来说线上有bug，必须马上修复。而此时你的功能开发到一半，于是你急忙想切到 master 分支，然后你就会看到以下报错：</p>
+<p><img src="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/typora/image-20220624173644355.png" alt="image-20220624173644355"></p>
+<p>因为当前有文件更改了，需要提交commit保持工作区干净才能切分支。由于情况紧急，你只有急忙 commit 上去，commit 信息也随便写了个“暂存代码”，于是该分支提交记录就留了一条黑历史…(真人真事，看过这种提交)</p>
+<h4 id="命令使用"><a href="#命令使用" class="headerlink" title="命令使用"></a>命令使用</h4><p>如果你学会 stash，就不用那么狼狈了。你只需要：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git stash  </span><br></pre></td></tr></tbody></table></figure>
+
+<p>就这么简单，代码就被存起来了。</p>
+<p>当你修复完线上问题，切回 feature 分支，想恢复代码也只需要：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git stash apply  </span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="相关命令"><a href="#相关命令" class="headerlink" title="相关命令"></a>相关命令</h4><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># 保存当前未commit的代码  </span><br><span class="line">git stash  </span><br><span class="line">  </span><br><span class="line"># 保存当前未commit的代码并添加备注  </span><br><span class="line">git stash save "备注的内容"  </span><br><span class="line">  </span><br><span class="line"># 列出stash的所有记录  </span><br><span class="line">git stash list  </span><br><span class="line">  </span><br><span class="line"># 删除stash的所有记录  </span><br><span class="line">git stash clear  </span><br><span class="line">  </span><br><span class="line"># 应用最近一次的stash  </span><br><span class="line">git stash apply  </span><br><span class="line">  </span><br><span class="line"># 应用最近一次的stash，随后删除该记录  </span><br><span class="line">git stash pop  </span><br><span class="line">  </span><br><span class="line"># 删除最近的一次stash  </span><br><span class="line">git stash drop  </span><br></pre></td></tr></tbody></table></figure>
+
+<p>当有多条 stash，可以指定操作stash，首先使用stash list 列出所有记录：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git stash list  </span><br><span class="line">stash@{0}: WIP on ...  </span><br><span class="line">stash@{1}: WIP on ...  </span><br><span class="line">stash@{2}: On ...  </span><br></pre></td></tr></tbody></table></figure>
+
+<p>应用第二条记录：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git stash apply stash@{1}  </span><br></pre></td></tr></tbody></table></figure>
+
+<p>pop，drop 同理。</p>
+<h3 id="reset-–soft"><a href="#reset-–soft" class="headerlink" title="reset –soft"></a>reset –soft</h3><h4 id="描述-1"><a href="#描述-1" class="headerlink" title="描述"></a>描述</h4><p>完全不接触索引文件或工作树（但会像所有模式一样，将头部重置为）。这使您的所有更改的文件更改为“要提交的更改”。</p>
+<p>回退你已提交的 commit，并将 commit 的修改内容放回到暂存区。</p>
+<p>一般我们在使用 reset 命令时，<code>git reset --hard</code>会被提及的比较多，它能让 commit 记录强制回溯到某一个节点。而<code>git reset --soft</code>的作用正如其名，<code>--soft</code>(柔软的) 除了回溯节点外，还会保留节点的修改内容。</p>
+<h4 id="应用场景-1"><a href="#应用场景-1" class="headerlink" title="应用场景"></a>应用场景</h4><p>回溯节点，为什么要保留修改内容？</p>
+<p>应用场景1：有时候手滑不小心把不该提交的内容 commit 了，这时想改回来，只能再 commit 一次，又多一条“黑历史”。</p>
+<p>应用场景2：规范些的团队，一般对于 commit 的内容要求职责明确，颗粒度要细，便于后续出现问题排查。本来属于两块不同功能的修改，一起 commit 上去，这种就属于不规范。这次恰好又手滑了，一次性 commit 上去。</p>
+<h4 id="命令使用-1"><a href="#命令使用-1" class="headerlink" title="命令使用"></a>命令使用</h4><p>学会<code>reset --soft</code>之后，你只需要：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 恢复最近一次 commit  </span><br><span class="line">git reset --soft HEAD^  </span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>reset --soft</code>相当于后悔药，给你重新改过的机会。对于上面的场景，就可以再次修改重新提交，保持干净的 commit 记录。</p>
+<p>以上说的是还未 push 的commit。对于已经 push 的 commit，也可以使用该命令，不过再次 push 时，由于远程分支和本地分支有差异，需要强制推送<code>git push -f</code>来覆盖被 reset 的 commit。</p>
+<p>还有一点需要注意，在<code>reset --soft</code>指定 commit 号时，会将该 commit 到最近一次 commit 的所有修改内容全部恢复，而不是只针对该 commit。</p>
+<p>举个例子：</p>
+<p>commit 记录有 c、b、a。</p>
+<p><img src="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/typora/image-20220624173738516.png" alt="image-20220624173738516"></p>
+<p>reset 到 a。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git reset --soft 1a900ac29eba73ce817bf959f82ffcb0bfa38f75  </span><br></pre></td></tr></tbody></table></figure>
+
+<p>此时的 HEAD 到了 a，而 b、c 的修改内容都回到了暂存区。</p>
+<p><img src="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/typora/image-20220624173730713.png" alt="image-20220624173730713"></p>
+<h3 id="参考网站"><a href="#参考网站" class="headerlink" title="参考网站"></a>参考网站</h3><p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=Mzg2MDYzODI5Nw==&amp;mid=2247511230&amp;idx=2&amp;sn=a174b898d3cb37b145f0bd32f27f9489&amp;chksm=ce21b188f956389e40eb97a036f3c334908ab79919ae2c4a0f29d78ca5c1bbda736843aac38e&amp;mpshare=1&amp;scene=1&amp;srcid=0624WciYFt872bUPrQOSlnHP&amp;sharer_sharetime=1656058423825&amp;sharer_shareid=4941bb2e64847f2c1fe5e12c4b33c013#rd">https://mp.weixin.qq.com/s?__biz=Mzg2MDYzODI5Nw==&amp;mid=2247511230&amp;idx=2&amp;sn=a174b898d3cb37b145f0bd32f27f9489&amp;chksm=ce21b188f956389e40eb97a036f3c334908ab79919ae2c4a0f29d78ca5c1bbda736843aac38e&amp;mpshare=1&amp;scene=1&amp;srcid=0624WciYFt872bUPrQOSlnHP&amp;sharer_sharetime=1656058423825&amp;sharer_shareid=4941bb2e64847f2c1fe5e12c4b33c013#rd</a></p>
+</article><div class="post-copyright"><div class="post-copyright__title"><span class="post-copyright-info"><h>Git 提高效率的命令</h></span></div><div class="post-copyright__type"><span class="post-copyright-info"><a href="http://www.zhangxiaotao.live/2022/06/24/Git/04-Git%20%E6%8F%90%E9%AB%98%E6%95%88%E7%8E%87%E7%9A%84%E5%91%BD%E4%BB%A4/">http://www.zhangxiaotao.live/2022/06/24/Git/04-Git%20%E6%8F%90%E9%AB%98%E6%95%88%E7%8E%87%E7%9A%84%E5%91%BD%E4%BB%A4/</a></span></div><div class="post-copyright-m"><div class="post-copyright-m-info"><div class="post-copyright-a" style="display: inline-block;width: 120px"><h>作者</h><div class="post-copyright-cc-info"><h>John Doe</h></div></div><div class="post-copyright-c" style="display: inline-block;width: 120px"><h>发布于</h><div class="post-copyright-cc-info"><h>2022-06-24</h></div></div><div class="post-copyright-u" style="display: inline-block;width: 120px"><h>更新于</h><div class="post-copyright-cc-info"><h>2022-06-24</h></div></div><div class="post-copyright-c" style="display: inline-block;width: 120px"><h>许可协议</h><div class="post-copyright-cc-info"><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a rel="noopener" target="_blank" title="CC BY 4.0" href="https://creativecommons.org/licenses/by/4.0/deed.zh">CC BY 4.0</a></div></div></div></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Git/">Git</a></div><div class="post_share"><div class="social-share" data-image="https://img0.baidu.com/it/u=3798434749,2608261770&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=750&amp;h=500" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer=""></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/06/28/%E5%89%8D%E7%AB%AF/Vue/05-%E6%B7%BB%E5%8A%A0%E7%AC%AC%E4%B8%89%E6%96%B9%E7%BB%84%E4%BB%B6%E5%BA%93/"><img class="prev-cover" src="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/blog/vue.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">添加第三方组件库</div></div></a></div><div class="next-post pull-right"><a href="/2022/06/24/%E5%89%8D%E7%AB%AF/Vue/04-%E6%9E%84%E5%BB%BAVue%E9%A1%B9%E7%9B%AE/"><img class="next-cover" src="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/blog/vue.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">构建Vue项目</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/12/18/Git/01-%E5%A6%82%E4%BD%95%E8%A7%84%E8%8C%83%E4%BD%A0%E7%9A%84Git%20commit%EF%BC%9F/" title="如何规范你的Git commit？"><img class="cover" src="https://img0.baidu.com/it/u=3798434749,2608261770&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=750&amp;h=500" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-18</div><div class="title">如何规范你的Git commit？</div></div></a></div><div><a href="/2021/12/18/Git/03-Git%20-%20%E6%89%93%E6%A0%87%E7%AD%BE/" title="Git-打标签"><img class="cover" src="https://img0.baidu.com/it/u=3798434749,2608261770&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=750&amp;h=500" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-18</div><div class="title">Git-打标签</div></div></a></div><div><a href="/2021/12/18/Git/02-Git%E7%AC%94%E8%AE%B0/" title="Git笔记"><img class="cover" src="https://img0.baidu.com/it/u=3798434749,2608261770&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=750&amp;h=500" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-18</div><div class="title">Git笔记</div></div></a></div></div></div><hr><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/typora/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"></div><div class="author-info__name">John Doe</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">387</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">38</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">46</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/zhzhang12138"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my blog   <img src="https://cdn.jsdelivr.net/gh/CNhuazhu/Image/pig.gif"></div><timing></timing></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#stash"><span class="toc-number">1.</span> <span class="toc-text">stash</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8F%8F%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">描述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">1.2.</span> <span class="toc-text">应用场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8"><span class="toc-number">1.3.</span> <span class="toc-text">命令使用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.</span> <span class="toc-text">相关命令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#reset-%E2%80%93soft"><span class="toc-number">2.</span> <span class="toc-text">reset –soft</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8F%8F%E8%BF%B0-1"><span class="toc-number">2.1.</span> <span class="toc-text">描述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF-1"><span class="toc-number">2.2.</span> <span class="toc-text">应用场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8-1"><span class="toc-number">2.3.</span> <span class="toc-text">命令使用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E7%BD%91%E7%AB%99"><span class="toc-number">3.</span> <span class="toc-text">参考网站</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/06/28/%E5%89%8D%E7%AB%AF/Vue/05-%E6%B7%BB%E5%8A%A0%E7%AC%AC%E4%B8%89%E6%96%B9%E7%BB%84%E4%BB%B6%E5%BA%93/" title="添加第三方组件库"><img src="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/blog/vue.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="添加第三方组件库"></a><div class="content"><a class="title" href="/2022/06/28/%E5%89%8D%E7%AB%AF/Vue/05-%E6%B7%BB%E5%8A%A0%E7%AC%AC%E4%B8%89%E6%96%B9%E7%BB%84%E4%BB%B6%E5%BA%93/" title="添加第三方组件库">添加第三方组件库</a><time datetime="2022-06-28T06:45:00.000Z" title="发表于 2022-06-28 14:45:00">2022-06-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/06/24/Git/04-Git%20%E6%8F%90%E9%AB%98%E6%95%88%E7%8E%87%E7%9A%84%E5%91%BD%E4%BB%A4/" title="Git 提高效率的命令"><img src="https://img0.baidu.com/it/u=3798434749,2608261770&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=750&amp;h=500" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Git 提高效率的命令"></a><div class="content"><a class="title" href="/2022/06/24/Git/04-Git%20%E6%8F%90%E9%AB%98%E6%95%88%E7%8E%87%E7%9A%84%E5%91%BD%E4%BB%A4/" title="Git 提高效率的命令">Git 提高效率的命令</a><time datetime="2022-06-24T09:39:00.000Z" title="发表于 2022-06-24 17:39:00">2022-06-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/06/24/%E5%89%8D%E7%AB%AF/Vue/04-%E6%9E%84%E5%BB%BAVue%E9%A1%B9%E7%9B%AE/" title="构建Vue项目"><img src="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/blog/vue.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="构建Vue项目"></a><div class="content"><a class="title" href="/2022/06/24/%E5%89%8D%E7%AB%AF/Vue/04-%E6%9E%84%E5%BB%BAVue%E9%A1%B9%E7%9B%AE/" title="构建Vue项目">构建Vue项目</a><time datetime="2022-06-24T08:07:00.000Z" title="发表于 2022-06-24 16:07:00">2022-06-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/06/24/%E5%89%8D%E7%AB%AF/Vue/03-%E5%89%8D%E7%AB%AF%E4%B9%8BVue%E4%BB%8B%E7%BB%8D/" title="前端之Vue介绍"><img src="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/blog/vue.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="前端之Vue介绍"></a><div class="content"><a class="title" href="/2022/06/24/%E5%89%8D%E7%AB%AF/Vue/03-%E5%89%8D%E7%AB%AF%E4%B9%8BVue%E4%BB%8B%E7%BB%8D/" title="前端之Vue介绍">前端之Vue介绍</a><time datetime="2022-06-24T08:06:00.000Z" title="发表于 2022-06-24 16:06:00">2022-06-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/06/24/%E5%89%8D%E7%AB%AF/Vue/02-Mac%E4%BD%BF%E7%94%A8brew%E5%AE%89%E8%A3%85node%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86%E5%99%A8-nvm/" title="Mac使用brew安装node版本管理器-nvm"><img src="https://img0.baidu.com/it/u=3118692165,2516922906&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=1140&amp;h=350" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Mac使用brew安装node版本管理器-nvm"></a><div class="content"><a class="title" href="/2022/06/24/%E5%89%8D%E7%AB%AF/Vue/02-Mac%E4%BD%BF%E7%94%A8brew%E5%AE%89%E8%A3%85node%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86%E5%99%A8-nvm/" title="Mac使用brew安装node版本管理器-nvm">Mac使用brew安装node版本管理器-nvm</a><time datetime="2022-06-24T08:05:00.000Z" title="发表于 2022-06-24 16:05:00">2022-06-24</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent"><div id="footer-wrap"><div class="copyright">©2020 - 2022 <i id="heartbeat" class="fa fas fa-heartbeat"></i>  John Doe</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my <a href="">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="translateLink" type="button" title="简繁转换">简</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="algolia-search"><div class="search-dialog"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="/js/search/algolia.js"></script><div class="js-pjax"><script async="async">var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',()=> {preloader.endLoading()})
+setTimeout(function(){preloader.endLoading();}, 3000);</script></div><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '',
+      appKey: '',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script src="/js/timing.js"></script><script src="https://cdn.jsdelivr.net/gh/weilain/cdn-photo/js/jquery.min.js"></script><script async="" data-pjax="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script type="text/javascript" src="/js/crash_cheat.js"></script></body></html>
