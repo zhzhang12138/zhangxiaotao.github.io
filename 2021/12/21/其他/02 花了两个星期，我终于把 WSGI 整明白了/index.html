@@ -1,0 +1,451 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>花了两个星期，我终于把 WSGI 整明白了  | John Doe</title><meta name="keywords" content="其他"><meta name="author" content="John Doe"><meta name="copyright" content="John Doe"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="花了两个星期，我终于把 WSGI 整明白了在 三百六十行，行行转 IT 的现状下，很多来自各行各业的同学，都选择 Python 这门胶水语言做为踏入互联网大门的第一块敲门砖，在这些人里，又有相当大比例的同学选择了 Web 开发这个方向（包括我）。而从事 web 开发，绕不过一个知识点，就是 WSGI。 不管你是否是这些如上同学中的一员，都应该好好地学习一下这个知识点。 由于我本人不从事专业的 py">
+<meta property="og:type" content="article">
+<meta property="og:title" content="花了两个星期，我终于把 WSGI 整明白了 ">
+<meta property="og:url" content="http://www.zhangxiaotao.live/2021/12/21/%E5%85%B6%E4%BB%96/02%20%E8%8A%B1%E4%BA%86%E4%B8%A4%E4%B8%AA%E6%98%9F%E6%9C%9F%EF%BC%8C%E6%88%91%E7%BB%88%E4%BA%8E%E6%8A%8A%20WSGI%20%E6%95%B4%E6%98%8E%E7%99%BD%E4%BA%86/index.html">
+<meta property="og:site_name" content="John Doe">
+<meta property="og:description" content="花了两个星期，我终于把 WSGI 整明白了在 三百六十行，行行转 IT 的现状下，很多来自各行各业的同学，都选择 Python 这门胶水语言做为踏入互联网大门的第一块敲门砖，在这些人里，又有相当大比例的同学选择了 Web 开发这个方向（包括我）。而从事 web 开发，绕不过一个知识点，就是 WSGI。 不管你是否是这些如上同学中的一员，都应该好好地学习一下这个知识点。 由于我本人不从事专业的 py">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img0.baidu.com/it/u=1473109762,986772641&amp;fm=26&amp;fmt=auto">
+<meta property="article:published_time" content="2021-12-21T08:47:00.000Z">
+<meta property="article:modified_time" content="2021-12-21T08:40:07.373Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="其他">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img0.baidu.com/it/u=1473109762,986772641&amp;fm=26&amp;fmt=auto"><link rel="shortcut icon" href="/img/avatar.png"><link rel="canonical" href="http://www.zhangxiaotao.live/2021/12/21/%E5%85%B6%E4%BB%96/02%20%E8%8A%B1%E4%BA%86%E4%B8%A4%E4%B8%AA%E6%98%9F%E6%9C%9F%EF%BC%8C%E6%88%91%E7%BB%88%E4%BA%8E%E6%8A%8A%20WSGI%20%E6%95%B4%E6%98%8E%E7%99%BD%E4%BA%86/"><link rel="preconnect" href="//cdn.jsdelivr.net"><link rel="preconnect" href="//busuanzi.ibruce.info"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer=""></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: {"appId":"B0YYEXE704","apiKey":"df3b5032cce15f8c2fe870edf0ff7d98","indexName":"blog","hits":{"per_page":10},"languages":{"input_placeholder":"搜索文章","hits_empty":"找不到您查询的内容：${query}","hits_stats":"找到 ${hits} 条结果，用时 ${time} 毫秒"}},
+  localSearch: undefined,
+  translate: {"defaultEncoding":1,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":500},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '花了两个星期，我终于把 WSGI 整明白了 ',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-12-21 16:40:07'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/mouse.css"><style>#article-container.post-content h1:before, h2:before, h3:before, h4:before, h5:before, h6:before { -webkit-animation: avatar_turn_around 1s linear infinite; -moz-animation: avatar_turn_around 1s linear infinite; -o-animation: avatar_turn_around 1s linear infinite; -ms-animation: avatar_turn_around 1s linear infinite; animation: avatar_turn_around 1s linear infinite; }</style><link rel="stylesheet" href="/css/copyright.css"><link rel="stylesheet" href="/css/modify.styl"><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/HCLonely/images@master/others/heartbeat.min.css"><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="wizard-scene"><div class="wizard-objects"><div class="wizard-square"></div><div class="wizard-circle"></div><div class="wizard-triangle"></div></div><div class="wizard"><div class="wizard-body"></div><div class="wizard-right-arm"><div class="wizard-right-hand"></div></div><div class="wizard-left-arm"><div class="wizard-left-hand"></div></div><div class="wizard-head"><div class="wizard-beard"></div><div class="wizard-face"><div class="wizard-adds"></div></div><div class="wizard-hat"><div class="wizard-hat-of-the-hat"></div><div class="wizard-four-point-star --first"></div><div class="wizard-four-point-star --second"></div><div class="wizard-four-point-star --third"></div></div></div></div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/typora/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">412</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">41</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div></div></div><hr><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/love/"><i class="fa-fw fas fa-gift"></i><span> Love</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background: transparent"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">John Doe</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/love/"><i class="fa-fw fas fa-gift"></i><span> Love</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">花了两个星期，我终于把 WSGI 整明白了 </h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-12-21T08:47:00.000Z" title="发表于 2021-12-21 16:47:00">2021-12-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-12-21T08:40:07.373Z" title="更新于 2021-12-21 16:40:07">2021-12-21</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%85%B6%E4%BB%96/">其他</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="花了两个星期，我终于把 WSGI 整明白了 "><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="花了两个星期，我终于把-WSGI-整明白了"><a href="#花了两个星期，我终于把-WSGI-整明白了" class="headerlink" title="花了两个星期，我终于把 WSGI 整明白了"></a>花了两个星期，我终于把 WSGI 整明白了</h1><p>在 三百六十行，行行转 IT 的现状下，很多来自各行各业的同学，都选择 Python 这门胶水语言做为踏入互联网大门的第一块敲门砖，在这些人里，又有相当大比例的同学选择了 Web 开发这个方向（包括我）。而从事 web 开发，绕不过一个知识点，就是 WSGI。</p>
+<p>不管你是否是这些如上同学中的一员，都应该好好地学习一下这个知识点。</p>
+<p>由于我本人不从事专业的 python web 开发，所以在写这篇文章的时候，借鉴了许多优秀的网络博客，并花了很多的精力阅读了大量的 OpenStack 代码。</p>
+<p>为了写这篇文章，零零散散地花了大概两个星期。本来可以拆成多篇文章，写成一个系列的，经过一番思虑，还是准备一篇讲完，这就是本篇文章这么长的原因。</p>
+<p>另外，一篇文章是不能吃透一个知识点的，本篇涉及的背景知识也比较多的，若我有讲得不到位的，还请你多多查阅其他人的网络博客进一步学习。</p>
+<p>在你往下看之前，我先问你几个问题，你带着这些问题往下看，可能更有目的性，学习可能更有效果。</p>
+<p>问1：一个 HTTP 请求到达对应的 application处理函数要经过怎样的过程？</p>
+<p>问2：如何不通过流行的 web 框架来写一个简单的web服务？</p>
+<p>一个HTTP请求的过程可以分为两个阶段，第一阶段是从客户端到WSGI Server，第二阶段是从WSGI Server 到WSGI Application</p>
+<p><img src="http://image.python-online.cn/20190607131728.png" alt="img"></p>
+<p>今天主要是讲第二阶段，主要内容有以下几点：</p>
+<ol>
+<li>WSGI 是什么，因何而生？</li>
+<li>HTTP请求是如何到应用程序的？</li>
+<li>实现一个简单的 WSGI Server</li>
+<li>实现“高并发”的WSGI Server</li>
+<li>第一次路由：PasteDeploy</li>
+<li>PasteDeploy 使用说明</li>
+<li>webob.dec.wsgify 装饰器</li>
+<li>第二次路由：中间件 routes 路由</li>
+</ol>
+<h2 id="01-WSGI-是什么，因何而生？"><a href="#01-WSGI-是什么，因何而生？" class="headerlink" title="01. WSGI 是什么，因何而生？"></a>01. WSGI 是什么，因何而生？</h2><p>WSGI是 Web Server Gateway Interface 的缩写。</p>
+<p>它是 Python应用程序（application）或框架（如 Django）和 Web服务器之间的一种接口，已经被广泛接受。</p>
+<p>它是一种协议，一种规范，其是在 PEP 333提出的，并在 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/27600327">PEP 3333</a> 进行补充（主要是为了支持 Python3.x）。这个协议旨在解决众多 web 框架和web server软件的兼容问题。有了WSGI，你不用再因为你使用的web 框架而去选择特定的 web server软件。</p>
+<p>常见的web应用框架有：Django，Flask等</p>
+<p>常用的web服务器软件有：uWSGI，Gunicorn等</p>
+<p>那这个 WSGI 协议内容是什么呢？知乎上有人将 PEP 3333 翻译成中文，写得非常好，我将这段协议的内容搬运过来。</p>
+<blockquote>
+<p>WSGI 接口有服务端和应用端两部分，服务端也可以叫网关端，应用端也叫框架端。服务端调用一个由应用端提供的可调用对象。如何提供这个对象，由服务端决定。例如某些服务器或者网关需要应用的部署者写一段脚本，以创建服务器或者网关的实例，并且为这个实例提供一个应用实例。另一些服务器或者网关则可能使用配置文件或其他方法以指定应用实例应该从哪里导入或获取。</p>
+</blockquote>
+<p>WSGI 对于 application 对象有如下三点要求</p>
+<ol>
+<li>必须是一个可调用的对象</li>
+<li>接收两个必选参数environ、start_response。</li>
+<li>返回值必须是可迭代对象，用来表示http body。</li>
+</ol>
+<h2 id="02-HTTP请求是如何到应用程序的？"><a href="#02-HTTP请求是如何到应用程序的？" class="headerlink" title="02. HTTP请求是如何到应用程序的？"></a>02. HTTP请求是如何到应用程序的？</h2><p>当客户端发出一个 HTTP 请求后，是如何转到我们的应用程序处理并返回的呢？</p>
+<p>关于这个过程，细节的点这里没法细讲，只能讲个大概。</p>
+<p>我根据其架构组成的不同将这个过程的实现分为两种：</p>
+<p><img src="http://image.python-online.cn/20190607191954.png" alt="img"></p>
+<p><strong>1、两级结构</strong><br>在这种结构里，uWSGI作为服务器，它用到了HTTP协议以及wsgi协议，flask应用作为application，实现了wsgi协议。当有客户端发来请求，uWSGI接受请求，调用flask app得到相应，之后相应给客户端。<br>这里说一点，通常来说，Flask等web框架会自己附带一个wsgi服务器(这就是flask应用可以直接启动的原因)，但是这只是在开发阶段用到的，在生产环境是不够用的，所以用到了uwsgi这个性能高的wsgi服务器。</p>
+<p><strong>2、三级结构</strong><br>这种结构里，uWSGI作为中间件，它用到了uwsgi协议(与nginx通信)，wsgi协议(调用Flask app)。当有客户端发来请求，nginx先做处理(静态资源是nginx的强项)，无法处理的请求(uWSGI)，最后的相应也是nginx回复给客户端的。<br>多了一层反向代理有什么好处？</p>
+<p>提高web server性能(uWSGI处理静态资源不如nginx；nginx会在收到一个完整的http请求后再转发给wWSGI)</p>
+<p>nginx可以做负载均衡(前提是有多个服务器)，保护了实际的web服务器(客户端是和nginx交互而不是uWSGI)</p>
+<h2 id="03-实现一个简单的-WSGI-Server"><a href="#03-实现一个简单的-WSGI-Server" class="headerlink" title="03. 实现一个简单的 WSGI Server"></a>03. 实现一个简单的 WSGI Server</h2><p>在上面的架构图里，不知道你发现没有，有个库叫做 <code>wsgiref</code> ，它是 Python 自带的一个 wsgi 服务器模块。</p>
+<p>从其名字上就看出，它是用纯Python编写的WSGI服务器的参考实现。所谓“参考实现”是指该实现完全符合WSGI标准，但是不考虑任何运行效率，仅供开发和测试使用。</p>
+<p>有了 wsgiref 这个模块，你就可以很快速的启动一个wsgi server。</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Copy</span><br><span class="line">Copyfrom wsgiref.simple_server <span class="keyword">import</span> make_server</span><br><span class="line"></span><br><span class="line"><span class="comment"># 这里的 appclass 暂且不说，后面会讲到</span></span><br><span class="line">app = appclass()</span><br><span class="line">server = make_server(<span class="string">''</span>, <span class="number">64570</span>, app)</span><br><span class="line">server.serve_forever()</span><br></pre></td></tr></tbody></table></figure>
+
+<p>当你运行这段代码后，就会开启一个 wsgi server，监听 <code>0.0.0.0:64570</code> ，并接收请求。</p>
+<p>使用 lsof 命令可以查到确实开启了这个端口</p>
+<p><img src="http://image.python-online.cn/20190607134310.png" alt="img"></p>
+<p>以上使用 wsgiref 写了一个demo，让你对wsgi有个初步的了解。其由于只适合在学习测试使用，在生产环境中应该另寻他道。</p>
+<h2 id="04-实现“高并发”的-WSGI-Server"><a href="#04-实现“高并发”的-WSGI-Server" class="headerlink" title="04. 实现“高并发”的 WSGI Server"></a>04. 实现“高并发”的 WSGI Server</h2><p>上面我们说不能在生产中使用 wsgiref ，那在生产中应该使用什么呢？选择有挺多的，比如优秀的 uWSGI，Gunicore等。但是今天我并不准备讲这些，一是因为我不怎么熟悉，二是因为我本人从事 OpenStack 的二次开发，对它比较熟悉。</p>
+<p>所以下面，是我花了几天时间阅读 OpenStack 中的 Nova 组件代码的实现，刚好可以拿过来学习记录一下，若有理解偏差，还望你批评指出。</p>
+<p>在 nova 组件里有不少服务，比如 nova-api，nova-compute，nova-conductor，nova-scheduler 等等。</p>
+<p>其中，只有 nova-api 有对外开启 http 接口。</p>
+<p>要了解这个http 接口是如何实现的，从服务启动入口开始看代码，肯定能找到一些线索。</p>
+<p>从 Service 文件可以得知 nova-api 的入口是 <code>nova.cmd.api:main()</code></p>
+<p><img src="http://image.python-online.cn/20190607140817.png" alt="img"></p>
+<p><img src="http://image.python-online.cn/20190607140922.png" alt="img"></p>
+<p>打开<code>nova.cmd.api:main()</code> ，一起看看是 OpenStack Nova 的代码。</p>
+<p>在如下的黄框里，可以看到在这里使用了service.WSGIService 启动了一个 server，就是我们所说的的 wsgi server</p>
+<p><img src="http://image.python-online.cn/20190530212557.png" alt="img"></p>
+<p>那这里的 WSGI Server 是依靠什么实现的呢？让我们继续深入源代码。</p>
+<p><img src="http://image.python-online.cn/20190530212753.png" alt="img"></p>
+<p>wsgi.py 可以看到这里使用了 eventlet 这个网络并发框架，它先开启了一个绿色线程池，从配置里可以看到这个服务器可以接收的请求并发量是 1000 。</p>
+<p><img src="http://image.python-online.cn/20190530212956.png" alt="img"></p>
+<p>可是我们还没有看到 WSGI Server 的身影，上面使用eventlet 开启了线程池，那线程池里的每个线程应该都是一个服务器吧？它是如何接收请求的？</p>
+<p>再继续往下，可以发现，每个线程都是使用 eventlet.wsgi.server 开启的 WSGI Server，还是使用的 eventlet。</p>
+<p>由于源代码比较多，我提取了主要的代码，精简如下</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">Copy</span><br><span class="line">Copy<span class="comment"># 创建绿色线程池</span></span><br><span class="line">self._pool = eventlet.GreenPool(self.pool_size)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建 socket：监听的ip，端口</span></span><br><span class="line">bind_addr = (host, port)</span><br><span class="line">self._socket = eventlet.listen(bind_addr, family, backlog=backlog)</span><br><span class="line">dup_socket = self._socket.dup()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 整理孵化协程所需的各项参数</span></span><br><span class="line">wsgi_kwargs = {</span><br><span class="line">    <span class="string">'func'</span>: eventlet.wsgi.server,</span><br><span class="line">    <span class="string">'sock'</span>: dup_socket,</span><br><span class="line">    <span class="string">'site'</span>: self.app, <span class="comment"># 这个就是 wsgi 的 application 函数</span></span><br><span class="line">    <span class="string">'protocol'</span>: self._protocol,</span><br><span class="line">    <span class="string">'custom_pool'</span>: self._pool,</span><br><span class="line">    <span class="string">'log'</span>: self._logger,</span><br><span class="line">    <span class="string">'log_format'</span>: CONF.wsgi.wsgi_log_format,</span><br><span class="line">    <span class="string">'debug'</span>: <span class="literal">False</span>,</span><br><span class="line">    <span class="string">'keepalive'</span>: CONF.wsgi.keep_alive,</span><br><span class="line">    <span class="string">'socket_timeout'</span>: self.client_socket_timeout</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment"># 孵化协程</span></span><br><span class="line">self._server = utils.spawn(**wsgi_kwargs)</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img src="http://image.python-online.cn/20190530214820.png" alt="img"></p>
+<p>就这样，nova 开启了一个可以接受1000个绿色协程并发的 WSGI Server。</p>
+<h2 id="05-第一次路由：PasteDeploy"><a href="#05-第一次路由：PasteDeploy" class="headerlink" title="05. 第一次路由：PasteDeploy"></a>05. 第一次路由：PasteDeploy</h2><p>上面我们提到 WSGI Server 的创建要传入一个 Application，用来处理接收到的请求，对于一个有多个 app 的项目。</p>
+<p>比如，你有一个个人网站提供了如下几个模块</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Copy</span><br><span class="line">Copy/blog  # 博客 app</span><br><span class="line">/wiki  # wiki app</span><br></pre></td></tr></tbody></table></figure>
+
+<p>如何根据 请求的url 地址，将请求转发到对应的application上呢？</p>
+<p>答案是，使用 PasteDeploy 这个库（在 OpenStack 中各组件被广泛使用）。</p>
+<p>PasteDeploy 到底是做什么的呢？</p>
+<p>根据 <a target="_blank" rel="noopener" href="https://pastedeploy.readthedocs.io/en/latest/#introduction">官方文档</a> 的说明，翻译如下</p>
+<blockquote>
+<p>PasteDeploy 是用来寻找和配置WSGI应用和服务的系统。PasteDeploy给开发者提供了一个简单的函数loadapp。通过这个函数，可以从一个配置文件或者Python egg中加载一个WSGI应用。</p>
+</blockquote>
+<p>使用PasteDeploy的其中一个重要意义在于，系统管理员可以安装和管理WSGI应用，而无需掌握与Python和WSGI相关知识。</p>
+<p>由于 PasteDeploy 原来是属于 Paste 的，现在独立出来了，但是安装的时候还是会安装到paste目录（site-packages\paste\deploy）下。</p>
+<p>我会先讲下在 Nova 中，是如何借助 PasteDeploy 实现对url的路由转发。</p>
+<p>还记得在上面创建WSGI Server的时候，传入了一个 self.app 参数，这个app并不是一个固定的app，而是使用 PasteDeploy 中提供的 loadapp 函数从 paste.ini 配置文件中加载application。</p>
+<p>具体可以，看下nova的实现。</p>
+<p><img src="http://image.python-online.cn/20190530221101.png" alt="img"></p>
+<p>通过打印的 DEBUG 内容得知 config_url 和 app name 的值</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Copy</span><br><span class="line">Copyapp: osapi_compute</span><br><span class="line">config_url: /etc/nova/api-paste.inia</span><br></pre></td></tr></tbody></table></figure>
+
+<p>通过查看 <code>/etc/nova/api-paste.ini</code> ，在 composite 段里找到了 <code>osapi_compute</code> 这个app（这里的app和wsgi app 是两个概念，需要注意区分） ，可以看出 nova 目前有两个版本的api，一个是 v2，一个是v2.1，目前我们在用的是 v2.1，从配置文件中，可以得到其指定的 application 的路径是<code>nova.api.openstack.compute</code> 这个模块下的 APIRouterV21 类 的factory方法，这是一个工厂函数，返回 APIRouterV21 实例。</p>
+<figure class="highlight ini"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Copy</span><br><span class="line">Copy<span class="section">[composite:osapi_compute]</span></span><br><span class="line"><span class="attr">use</span> = call:nova.api.openstack.urlmap:urlmap_factory</span><br><span class="line">/: oscomputeversions</span><br><span class="line">/v2: openstack_compute_api_v21_legacy_v2_compatible</span><br><span class="line">/v2.1: openstack_compute_api_v21</span><br><span class="line"></span><br><span class="line"><span class="section">[app:osapi_compute_app_v21]</span></span><br><span class="line"><span class="attr">paste.app_factory</span> = nova.api.openstack.compute:APIRouterV21.factory</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这是 OpenStack 使用 PasteDeploy 实现的第一层的路由，如果你不感兴趣，可以直接略过本节，进入下一节，下一节是 介绍 PasteDeploy 的使用，教你实现一个简易的web server demo。推荐一定要看。</p>
+<h2 id="06-PasteDeploy-使用说明"><a href="#06-PasteDeploy-使用说明" class="headerlink" title="06. PasteDeploy 使用说明"></a>06. PasteDeploy 使用说明</h2><p>到上一步，我已经得到了 application 的有用的线索。考虑到很多人是第一次接触 PasteDeploy，所以这里结合网上博客做了下总结。对你入门会有帮助。</p>
+<p>掌握 PasteDeploy ，你只要按照以下三个步骤逐个完成即可。</p>
+<p>1、配置 PasteDeploy使用的ini文件；</p>
+<p>2、定义WSGI应用；</p>
+<p>3、通过loadapp函数加载WSGI应用；</p>
+<p><strong>第一步：写 paste.ini 文件</strong></p>
+<p>在写之前，咱得知道 ini 文件的格式吧。</p>
+<p>首先，像下面这样一个段叫做 <code>section</code>。</p>
+<figure class="highlight ini"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Copy</span><br><span class="line">Copy<span class="section">[type:name]</span></span><br><span class="line"><span class="attr">key</span> = value</span><br><span class="line">...</span><br></pre></td></tr></tbody></table></figure>
+
+<p>其上的type，主要有如下几种</p>
+<ol>
+<li><p><code>composite</code> （组合）：多个app的路由分发；</p>
+<figure class="highlight ini"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Copy</span><br><span class="line">Copy<span class="section">[composite:main]</span></span><br><span class="line"><span class="attr">use</span> = egg:Paste<span class="comment">#urlmap</span></span><br><span class="line">/ = home</span><br><span class="line">/<span class="attr">blog</span> = blog</span><br><span class="line">/<span class="attr">wiki</span> = wiki</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>app（应用）：指明 WSGI 应用的路径；</p>
+<figure class="highlight ini"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Copy</span><br><span class="line">Copy<span class="section">[app:home]</span></span><br><span class="line"><span class="attr">paste.app_factory</span> = example:Home.factory</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>pipeline（管道）：给一个 app 绑定多个过滤器。将多个filter和最后一个WSGI应用串联起来。</p>
+<figure class="highlight ini"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Copy</span><br><span class="line">Copy<span class="section">[pipeline:main]</span></span><br><span class="line"><span class="attr">pipeline</span> = filter1 filter2 filter3 myapp</span><br><span class="line"></span><br><span class="line"><span class="section">[filter:filter1]</span></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="section">[filter:filter2]</span></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="section">[app:myapp]</span></span><br><span class="line">...</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>filter（过滤器）：以 app 做为唯一参数的函数，并返回一个“过滤”后的app。通过键值next可以指定需要将请求传递给谁。next指定的可以是一个普通的WSGI应用，也可以是另一个过滤器。虽然名称上是过滤器，但是功能上不局限于过滤功能，可以是其它功能，例如日志功能，即将认为重要的请求数据记录下来。</p>
+<figure class="highlight ini"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Copy</span><br><span class="line">Copy<span class="section">[app-filter:filter_name]</span></span><br><span class="line"><span class="attr">use</span> = egg:...</span><br><span class="line"><span class="attr">next</span> = next_app</span><br><span class="line"></span><br><span class="line"><span class="section">[app:next_app]</span></span><br><span class="line">...</span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<p>对 ini 文件有了一定的了解后，就可以看懂下面这个 ini 配置文件了</p>
+<figure class="highlight ini"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Copy</span><br><span class="line">Copy<span class="section">[composite:main]</span></span><br><span class="line"><span class="attr">use</span> = egg:Paste<span class="comment">#urlmap</span></span><br><span class="line">/<span class="attr">blog</span> = blog</span><br><span class="line">/<span class="attr">wiki</span> = wiki</span><br><span class="line"></span><br><span class="line"><span class="section">[app:blog]</span></span><br><span class="line"><span class="attr">paste.app_factory</span> = example:Blog.factory</span><br><span class="line"></span><br><span class="line"><span class="section">[app:wiki]</span></span><br><span class="line"><span class="attr">paste.app_factory</span> = example:Wiki.factory</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>第二步是定义一个符合 WSGI 规范的 applicaiton 对象。</strong></p>
+<p>符合 WSGI 规范的 application 对象，可以有多种形式，函数，方法，类，实例对象。这里仅以实例对象为例（需要实现 <code>__call__</code> 方法），做一个演示。</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">Copy</span><br><span class="line">Copyimport os</span><br><span class="line"><span class="keyword">from</span> paste <span class="keyword">import</span> deploy</span><br><span class="line"><span class="keyword">from</span> wsgiref.simple_server <span class="keyword">import</span> make_server</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Blog</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"Init Blog."</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span>(<span class="params">self, environ, start_response</span>):</span></span><br><span class="line">        status_code = <span class="string">"200 OK"</span></span><br><span class="line">        response_headers = [(<span class="string">"Content-Type"</span>, <span class="string">"text/plain"</span>)]</span><br><span class="line">        response_body = <span class="string">"This is Blog's response body."</span>.encode(<span class="string">'utf-8'</span>)</span><br><span class="line"></span><br><span class="line">        start_response(status_code, response_headers)</span><br><span class="line">        <span class="keyword">return</span> [response_body]</span><br><span class="line"></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">factory</span>(<span class="params">cls, global_conf, **kwargs</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"Blog factory."</span>)</span><br><span class="line">        <span class="keyword">return</span> Blog()</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>最后，第三步是使用 loadapp 函数加载 WSGI 应用。</strong></p>
+<p>loadapp 是 PasteDeploy 提供的一个函数，使用它可以很方便地从第一步的ini配置文件里加载 app</p>
+<p>loadapp 函数可以接收两个实参：</p>
+<ul>
+<li>URI：”config:&lt;配置文件的全路径&gt;”</li>
+<li>name：WSGI应用的名称</li>
+</ul>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Copy</span><br><span class="line">Copyconf_path = os.path.abspath(<span class="string">'paste.ini'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载 app</span></span><br><span class="line">applications = deploy.loadapp(<span class="string">"config:{}"</span>.<span class="built_in">format</span>(conf_path) , <span class="string">"main"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动 server, 监听 localhost:22800 </span></span><br><span class="line">server = make_server(<span class="string">"localhost"</span>, <span class="string">"22800"</span>, applications)</span><br><span class="line">server.serve_forever()</span><br></pre></td></tr></tbody></table></figure>
+
+<p>applications 是URLMap 对象。</p>
+<p><img src="http://image.python-online.cn/20190607154119.png" alt="img"></p>
+<p>完善并整合第二步和第三步的内容，写成一个 Python 文件(wsgi_server.py)。内容如下</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">Copy</span><br><span class="line">Copyimport os</span><br><span class="line"><span class="keyword">from</span> paste <span class="keyword">import</span> deploy</span><br><span class="line"><span class="keyword">from</span> wsgiref.simple_server <span class="keyword">import</span> make_server</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Blog</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"Init Blog."</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span>(<span class="params">self, environ, start_response</span>):</span></span><br><span class="line">        status_code = <span class="string">"200 OK"</span></span><br><span class="line">        response_headers = [(<span class="string">"Content-Type"</span>, <span class="string">"text/plain"</span>)]</span><br><span class="line">        response_body = <span class="string">"This is Blog's response body."</span>.encode(<span class="string">'utf-8'</span>)</span><br><span class="line"></span><br><span class="line">        start_response(status_code, response_headers)</span><br><span class="line">        <span class="keyword">return</span> [response_body]</span><br><span class="line"></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">factory</span>(<span class="params">cls, global_conf, **kwargs</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"Blog factory."</span>)</span><br><span class="line">        <span class="keyword">return</span> Blog()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Wiki</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"Init Wiki."</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span>(<span class="params">self, environ, start_response</span>):</span></span><br><span class="line">        status_code = <span class="string">"200 OK"</span></span><br><span class="line">        response_headers = [(<span class="string">"Content-Type"</span>, <span class="string">"text/plain"</span>)]</span><br><span class="line">        response_body = <span class="string">"This is Wiki's response body."</span>.encode(<span class="string">'utf-8'</span>)</span><br><span class="line"></span><br><span class="line">        start_response(status_code, response_headers)</span><br><span class="line">        <span class="keyword">return</span> [response_body]</span><br><span class="line"></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">factory</span>(<span class="params">cls, global_conf, **kwargs</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"Wiki factory."</span>)</span><br><span class="line">        <span class="keyword">return</span> Wiki()</span><br><span class="line">      </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    app = <span class="string">"main"</span></span><br><span class="line">    port = <span class="number">22800</span></span><br><span class="line">    conf_path = os.path.abspath(<span class="string">'paste.ini'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 加载 app</span></span><br><span class="line">    applications = deploy.loadapp(<span class="string">"config:{}"</span>.<span class="built_in">format</span>(conf_path) , app)</span><br><span class="line">    server = make_server(<span class="string">"localhost"</span>, port, applications)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">'Started web server at port {}'</span>.<span class="built_in">format</span>(port))</span><br><span class="line">    server.serve_forever()</span><br></pre></td></tr></tbody></table></figure>
+
+<p>一切都准备好后，在终端执行 <code>python wsgi_server.py</code>来启动 web server</p>
+<p><img src="http://image.python-online.cn/20190607155432.png" alt="img"></p>
+<p>如果像上图一样一切正常，那么打开浏览器</p>
+<ul>
+<li>访问<a target="_blank" rel="noopener" href="http://127.0.0.1:8000/blog%EF%BC%8C%E5%BA%94%E8%AF%A5%E6%98%BE%E7%A4%BA%EF%BC%9AThis">http://127.0.0.1:8000/blog，应该显示：This</a> is Blog’s response body.</li>
+<li>访问<a target="_blank" rel="noopener" href="http://127.0.0.1:8000/wiki%EF%BC%8C%E5%BA%94%E8%AF%A5%E6%98%BE%E7%A4%BA%EF%BC%9AThis">http://127.0.0.1:8000/wiki，应该显示：This</a> is Wiki’s response body.。</li>
+</ul>
+<p>注意：urlmap对url的大小写是敏感的，例如如果访问<a target="_blank" rel="noopener" href="http://127.0.0.1:8000/BLOG%EF%BC%8C%E5%9C%A8url%E6%98%A0%E5%B0%84%E4%B8%AD%E6%9C%AA%E8%83%BD%E6%89%BE%E5%88%B0%E5%A4%A7%E5%86%99%E7%9A%84BLOG%E3%80%82">http://127.0.0.1:8000/BLOG，在url映射中未能找到大写的BLOG。</a></p>
+<p>到此，你学会了使用 PasteDeploy 的简单使用。</p>
+<h2 id="07-webob-dec-wsgify-装饰器"><a href="#07-webob-dec-wsgify-装饰器" class="headerlink" title="07. webob.dec.wsgify 装饰器"></a>07. webob.dec.wsgify 装饰器</h2><p>经过了 PasteDeploy 的路由调度，我们找到了 <code>nova.api.openstack.compute:APIRouterV21.factory</code> 这个 application 的入口，看代码知道它其实返回了 APIRouterV21 类的一个实例。</p>
+<p><img src="http://image.python-online.cn/20190602173212.png" alt="img"></p>
+<p>WSGI规定 application 必须是一个 callable 的对象，函数、方法、类、实例，若是一个类实例，就要求这个实例所属的类实现 <code>__call__</code> 的方法。</p>
+<p>APIRouterV21 本身没有实现 <code>__call__</code> ，但它的父类 Router实现了 <code>__call__</code></p>
+<p><img src="http://image.python-online.cn/20190602173956.png" alt="img"></p>
+<p>我们知道，application 必须遵丛 WSGI 的规范</p>
+<ol>
+<li>必须接收<code>environ</code>, <code>start_response</code>两个参数;</li>
+<li>必须返回 「可迭代的对象」。</li>
+</ol>
+<p>但从 Router 的 <code>__call__</code> 代码来看，它并没有遵从这个规范，它不接收这两个参数，也不返回 response，而只是返回另一个 callable 的对象，就这样我们的视线被一次又一次的转移，但没有关系，这些<code>__call__</code>都是外衣，只要扒掉这些外衣，我们就能看到核心app。</p>
+<p>而负责扒掉这层外衣的，就是其头上的装饰器 <code>@webob.dec.wsgify</code> ，wsgify 是一个类，其 <code>__call__</code> 源码实现如下：<img src="http://image.python-online.cn/20190605203016.png" alt="img"></p>
+<p>可以看出，wsgify 在这里，会将 req 这个原始请求（dict对象）封装成 Request 对象（就是规范1里提到的 environ）。然后会一层一层地往里地执行被wsgify装饰的函数（self._route）， 得到最内部的核心application。</p>
+<p>上面提到了规范1里的第一个参数，补充下第二个参数start_response，它是在哪定义并传入的呢？</p>
+<p>其实这个无需我们操心，它是由 wsgi server 提供的，如果我们使用的是 wsgiref 库做为 server 的话。那这时的 start_response 就由 wsgiref 提供。</p>
+<p>再回到 wsgify，它的作用主要是对 WSGI app 进行封装，简化wsgi app的定义与编写，它可以很方便的将一个 callable 的函数或对象，封装成一个 WSGI app。</p>
+<p>上面，其实留下了一个问题，self._route（routes 中间件 RoutesMiddleware对象）是如何找到真正的 application呢？</p>
+<p>带着这个问题，我们了解下 routes 是如何为我们实现第二次路由。</p>
+<h2 id="08-第二次路由：中间件-routes-路由"><a href="#08-第二次路由：中间件-routes-路由" class="headerlink" title="08. 第二次路由：中间件 routes 路由"></a>08. 第二次路由：中间件 routes 路由</h2><p>在文章最开始处，我们给大家画了一张图。</p>
+<p><img src="http://image.python-online.cn/20190607131728.png" alt="img"></p>
+<p>这张图把一个 HTTP 请求粗略简单地划分为两个过程。但事实上，整个过程远比这个过程要复杂得多。</p>
+<p>实际上在 WSGI Server 到 WSGI Application 这个过程中，我们加很多的功能（比如鉴权、URL路由），而这些功能的实现方式，我们称之为中间件。</p>
+<p>中间件，对服务器而言，它是一个应用程序，是一个可调用对象， 有两个参数，返回一个可调用对象。而对应用程序而言，它是一个服务器，为应用程序提供了参数，并且调用了应用程序。</p>
+<p>今天以URL路由为例，来讲讲中间件在实际生产中是如何起作用的。</p>
+<p>当服务器拿到了客户端请求的URL，不同的URL需要交由不同的函数处理，这个功能叫做 URL Routing。</p>
+<p>在 Nova 中是用 routes 这个库来实现对URL的的路由调度。接下来，我将从源代码处分析一下这个过程。</p>
+<p>在routes模块里有个中间件，叫 <code>routes.middleware.RoutesMiddleware</code> ，它将接受到的 url，自动调用 <code>map.match()</code>方法，对 url 进行路由匹配，并将匹配的结果存入request请求的环境变量<code>['wsgiorg.routing_args']</code>，最后会调用<code>self._dispatch</code>（dispatch返回真正的application）返回response，最后会将这个response返回给 WSGI Server。</p>
+<p><img src="http://image.python-online.cn/20190608211233.png" alt="img"></p>
+<p>这个中间件的原理，看起来是挺简单的。并没有很复杂的逻辑。</p>
+<p>但是，我在阅读 routes 代码的时候，却发现了另一个令我困惑的点。</p>
+<p><code>self._dispatch</code> （也就上图中的self.app）函数里，我们看到了 app，controller 这几个很重要的字眼，其是否是我苦苦追寻的 application 对象呢？</p>
+<p><img src="http://image.python-online.cn/20190531211542.png" alt="img"></p>
+<p>要搞明白这个问题，只要看清 match 到是什么东西？</p>
+<p>这个 match 对象 是在 <code>RoutesMiddleware.__call__()</code> 里塞进 <code>req.environ</code> 的，它是什么东西呢，我将其打印出来。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Copy</span><br><span class="line">Copy{'action': u'detail', 'controller': &lt;nova.api.openstack.wsgi.ResourceV21 object at 0x667bad0&gt;, 'project_id': u'2ac17c7c792d45eaa764c30bac37fad9'}</span><br><span class="line"></span><br><span class="line">{'action': u'index', 'controller': &lt;nova.api.openstack.wsgi.ResourceV21 object at 0x6ec8910&gt;, 'project_id': u'2ac17c7c792d45eaa764c30bac37fad9'}</span><br><span class="line"></span><br><span class="line">{'action': u'show', 'controller': &lt;nova.api.openstack.wsgi.ResourceV21 object at 0x6ed9710&gt;, 'project_id': u'2ac17c7c792d45eaa764c30bac37fad9', 'id': u'68323d9c-ebe5-499a-92e9-32fea900a892'}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>结果令人在失所望呀，这个 app 并不是我们要寻找的 Controller 对象。而是 nova.api.openstack.wsgi.ResourceV21 类的实例对象，说白了就是Resource 对象。</p>
+<p>看到这里，我有心态有点要崩了，怎么还没到 Controller？OpenStack 框架的代码绕来绕去的，没有点耐心还真的很难读下去。</p>
+<p>既然已经开了头，没办法还得硬着头皮继续读了下去。</p>
+<p>终于我发现，在APIRouter初始化的时候，它会去注册所有的 Resource，同时将这些 Resource 交由 routes.Mapper 来管理、创建路由映射，所以上面提到的 routes.middleware.RoutesMiddleware 才能根据url通过 mapper.match 获取到相应的Resource。</p>
+<p>从 Nova 代码中看出每个Resource 对应一个 Controller 对象，因为 Controller 对象本身就是对一种资源的操作集合。</p>
+<p><img src="http://image.python-online.cn/20190531225529.png" alt="img"></p>
+<p>通过日志的打印，可以发现 nova 管理的 Resource 对象有多么的多而杂</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line">Copy</span><br><span class="line">Copyos-server-groups</span><br><span class="line">os-keypairs</span><br><span class="line">os-availability-zone</span><br><span class="line">remote-consoles</span><br><span class="line">os-simple-tenant-usage</span><br><span class="line">os-instance-actions</span><br><span class="line">os-migrations</span><br><span class="line">os-hypervisors</span><br><span class="line">diagnostics</span><br><span class="line">os-agents</span><br><span class="line">images</span><br><span class="line">os-fixed-ips</span><br><span class="line">os-networks</span><br><span class="line">os-security-groups</span><br><span class="line">os-security-groups</span><br><span class="line">os-security-group-rules</span><br><span class="line">flavors</span><br><span class="line">os-floating-ips-bulk</span><br><span class="line">os-console-auth-tokens</span><br><span class="line">os-baremetal-nodes</span><br><span class="line">os-cloudpipe</span><br><span class="line">os-server-external-events</span><br><span class="line">os-instance_usage_audit_log</span><br><span class="line">os-floating-ips</span><br><span class="line">os-security-group-default-rules</span><br><span class="line">os-tenant-networks</span><br><span class="line">os-certificates</span><br><span class="line">os-quota-class-sets</span><br><span class="line">os-floating-ip-pools</span><br><span class="line">os-floating-ip-dns</span><br><span class="line">entries</span><br><span class="line">os-aggregates</span><br><span class="line">os-fping</span><br><span class="line">os-server-password</span><br><span class="line">os-flavor-access</span><br><span class="line">consoles</span><br><span class="line">os-extra_specs</span><br><span class="line">os-interface</span><br><span class="line">os-services</span><br><span class="line">servers</span><br><span class="line">extensions</span><br><span class="line">metadata</span><br><span class="line">metadata</span><br><span class="line">limits</span><br><span class="line">ips</span><br><span class="line">os-cells</span><br><span class="line">versions</span><br><span class="line">tags</span><br><span class="line">migrations</span><br><span class="line">os-hosts</span><br><span class="line">os-virtual-interfaces</span><br><span class="line">os-assisted-volume-snapshots</span><br><span class="line">os-quota-sets</span><br><span class="line">os-volumes</span><br><span class="line">os-volumes_boot</span><br><span class="line">os-volume_attachments</span><br><span class="line">os-snapshots</span><br><span class="line">os-server-groups</span><br><span class="line">os-keypairs</span><br><span class="line">os-availability-zone</span><br><span class="line">remote-consoles</span><br><span class="line">os-simple-tenant-usage</span><br><span class="line">os-instance-actions</span><br><span class="line">os-migrations</span><br><span class="line">os-hypervisors</span><br><span class="line">diagnostics</span><br><span class="line">os-agents</span><br><span class="line">images</span><br><span class="line">os-fixed-ips</span><br><span class="line">os-networks</span><br><span class="line">os-security-groups</span><br><span class="line">os-security-groups</span><br><span class="line">os-security-group-rules</span><br><span class="line">flavors</span><br><span class="line">os-floating-ips-bulk</span><br><span class="line">os-console-auth-tokens</span><br><span class="line">os-baremetal-nodes</span><br><span class="line">os-cloudpipe</span><br><span class="line">os-server-external-events</span><br><span class="line">os-instance_usage_audit_log</span><br><span class="line">os-floating-ips</span><br><span class="line">os-security-group-default-rules</span><br><span class="line">os-tenant-networks</span><br><span class="line">os-certificates</span><br><span class="line">os-quota-class-sets</span><br><span class="line">os-floating-ip-pools</span><br><span class="line">os-floating-ip-dns</span><br><span class="line">entries</span><br><span class="line">os-aggregates</span><br><span class="line">os-fping</span><br><span class="line">os-server-password</span><br><span class="line">os-flavor-access</span><br><span class="line">consoles</span><br><span class="line">os-extra_specs</span><br><span class="line">os-interface</span><br><span class="line">os-services</span><br><span class="line">servers</span><br><span class="line">extensions</span><br><span class="line">metadata</span><br><span class="line">metadata</span><br><span class="line">limits</span><br><span class="line">ips</span><br><span class="line">os-cells</span><br><span class="line">versions</span><br><span class="line">tags</span><br><span class="line">migrations</span><br><span class="line">os-hosts</span><br><span class="line">os-virtual-interfaces</span><br><span class="line">os-assisted-volume-snapshots</span><br><span class="line">os-quota-sets</span><br><span class="line">os-volumes</span><br><span class="line">os-volumes_boot</span><br><span class="line">os-volume_attachments</span><br><span class="line">os-snapshots</span><br></pre></td></tr></tbody></table></figure>
+
+<p>你一定很好奇，这路由是如何创建的吧，关键代码就是如下一行。如果你想要了解更多路由的创建过程，可以看一下这篇文章（<a target="_blank" rel="noopener" href="https://blog.csdn.net/bellwhl/article/details/8956088">Python Route总结</a>），写得不错。</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Copy</span><br><span class="line">Copyroutes.mapper.connect(<span class="string">"server"</span>,</span><br><span class="line">               <span class="string">"/{project_id}/servers/list_vm_state"</span>,</span><br><span class="line">               controller=self.resources[<span class="string">'servers'</span>],</span><br><span class="line">               action=<span class="string">'list_vm_state'</span>,</span><br><span class="line">               conditions={<span class="string">'list_vm_state'</span>: <span class="string">'GET'</span>})</span><br></pre></td></tr></tbody></table></figure>
+
+<p>历尽了千辛万苦，我终于找到了 Controller 对象，知道了请求发出后，wsgi server是如何根据url找到对应的Controller（根据routes.Mapper路由映射）。</p>
+<p>但是很快，你又会问。对于一个资源的操作（action），有很多，比如新增，删除，更新等</p>
+<p>不同的操作要执行Controller 里不同的函数。</p>
+<p>如果是新增资源，就调用 create()</p>
+<p>如果是删除资源，就调用 delete()</p>
+<p>如果是更新资源，就调用 update()</p>
+<p>那代码如何怎样知道要执行哪个函数呢？</p>
+<p>以/servers/xxx/action请求为例，请求调用的函数实际包含在请求的body中。</p>
+<p>经过routes.middleware.RoutesMiddleware的<code>__call__</code>函数解析后，此时即将调用的Resource已经确定为哪个模块中的Controller所构建的Resource，而 action 参数为”action”，接下来在Resource的<code>__call__</code> 函数里面会因为action==”action”从而开始解析body的内容，找出Controller中所对应的方法。</p>
+<p>Controller在构建的过程中会由于MetaClass的影响将其所有action类型的方法填入一个字典中，key由每个<code>_action_xxx</code>方法前的 <code>@wsgi.action('xxx')</code>装饰函数给出，value为每个_action_xxx方法的名字（从中可以看出规律，在body里面请求的方法名前加上_aciton_即为Controller中对应调用的方法）。</p>
+<p>之后在使用Controller构建Resource对象的过程中会向Resource注册该Controller的这个字典中的内容。这样，只需在请求的body中给出调用方法的key，然后就可以找到这个key所映射的方法，最后在Resource的__call__函数中会调用Controller类的这个函数！</p>
+<p>其实我在上面我们打印 match 对象时，就已经将对应的函数打印出来了。</p>
+<p>这边以 nova show（展示资源为例），来理解一下。</p>
+<p>当你调用 nova show [uuid] 命令，novaclient 就会给 nova-api 发送一个http的请求</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Copy</span><br><span class="line">Copynova show 1c250b15-a346-43c5-9b41-20767ec7c94b</span><br></pre></td></tr></tbody></table></figure>
+
+<p>通过打印得到的 match 对象如下</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Copy</span><br><span class="line">Copy{'action': u'show', 'controller': &lt;nova.api.openstack.wsgi.ResourceV21 object at 0x667bad0&gt;, 'project_id': u'2ac17c7c792d45eaa764c30bac37fad9'}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>其中 action 就是对应的处理函数，而controller 就对应的 Resource 对象，project_id 是租户id（你可以不理会）。</p>
+<p>继续看 ResourceV21 类里的 <code>__call__</code> 函数的代码。</p>
+<p>图示地方，会从 environ 里获取中看到获取 action 的具体代码</p>
+<p><img src="http://image.python-online.cn/20190602220246.png" alt="img"></p>
+<p>我将这边的 action_args打印出来</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Copy</span><br><span class="line">Copy{'action': 'show', 'project_id': '2ac17c7c792d45eaa764c30bac37fad9', 'id': '1c250b15-a346-43c5-9b41-20767ec7c94b'}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>其中 action 还是是函数名，id 是要操作的资源的唯一id标识。</p>
+<p>在 <code>__call__</code> 的最后，会 调用 <code>_process_stack</code> 方法</p>
+<p><img src="http://image.python-online.cn/20190602220511.png" alt="img"></p>
+<p>在图标处，get_method 会根据 action（函数名） 取得处理函数对象。</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Copy</span><br><span class="line">Copymeth :&lt;bound method ServersController.show of &lt;nova.api.openstack.compute.servers.ServersController <span class="built_in">object</span> at <span class="number">0x7be3750</span>&gt;&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>最后，再执行这个函数，取得 action_result，在 <code>_process_stack</code> 会对 response 进行初步封装。</p>
+<p><img src="http://image.python-online.cn/20190602220700.png" alt="img"></p>
+<p>然后将 response 再返回到 wsgify ，由这个专业的工具函数，进行 response 的最后封装和返回给客户端。</p>
+<p><img src="http://image.python-online.cn/20190605203016.png" alt="img"></p>
+<p>至此，一个请求从发出到响应就结束了。</p>
+<hr>
+<h2 id="附录：参考文章"><a href="#附录：参考文章" class="headerlink" title="附录：参考文章"></a>附录：参考文章</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/wongbingming/p/11002978.html">https://www.cnblogs.com/wongbingming/p/11002978.html</a></li>
+</ul>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/27600327">PEP 3333 中文翻译</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/littlebugfish/p/4660595.html">nova-api源码分析（APP的调用）</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/bellwhl/article/details/8956088">Python Route总结</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/bellwhl/article/details/8956088">Python routes Mapper 的使用</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Security-Darren/p/4087587.html">详解 Paste deploy</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/hzrandd/article/details/10834381">paste.ini 文件使用说明</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.fmttr.com/python/thirdpartylibrary/pastedeploy/">PasteDeploy 小白教程</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/baidu_35085676/article/details/80184874">WSGI 两种架构图</a></li>
+<li><a target="_blank" rel="noopener" href="http://python.jobbole.com/88653/">伯乐在线：Python Web开发最难懂的WSGI协议</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/on_1y/article/details/18803563">WSGI 简介</a></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__title"><span class="post-copyright-info"><h>花了两个星期，我终于把 WSGI 整明白了 </h></span></div><div class="post-copyright__type"><span class="post-copyright-info"><a href="http://www.zhangxiaotao.live/2021/12/21/%E5%85%B6%E4%BB%96/02%20%E8%8A%B1%E4%BA%86%E4%B8%A4%E4%B8%AA%E6%98%9F%E6%9C%9F%EF%BC%8C%E6%88%91%E7%BB%88%E4%BA%8E%E6%8A%8A%20WSGI%20%E6%95%B4%E6%98%8E%E7%99%BD%E4%BA%86/">http://www.zhangxiaotao.live/2021/12/21/%E5%85%B6%E4%BB%96/02%20%E8%8A%B1%E4%BA%86%E4%B8%A4%E4%B8%AA%E6%98%9F%E6%9C%9F%EF%BC%8C%E6%88%91%E7%BB%88%E4%BA%8E%E6%8A%8A%20WSGI%20%E6%95%B4%E6%98%8E%E7%99%BD%E4%BA%86/</a></span></div><div class="post-copyright-m"><div class="post-copyright-m-info"><div class="post-copyright-a" style="display: inline-block;width: 120px"><h>作者</h><div class="post-copyright-cc-info"><h>John Doe</h></div></div><div class="post-copyright-c" style="display: inline-block;width: 120px"><h>发布于</h><div class="post-copyright-cc-info"><h>2021-12-21</h></div></div><div class="post-copyright-u" style="display: inline-block;width: 120px"><h>更新于</h><div class="post-copyright-cc-info"><h>2021-12-21</h></div></div><div class="post-copyright-c" style="display: inline-block;width: 120px"><h>许可协议</h><div class="post-copyright-cc-info"><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a rel="noopener" target="_blank" title="CC BY 4.0" href="https://creativecommons.org/licenses/by/4.0/deed.zh">CC BY 4.0</a></div></div></div></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%85%B6%E4%BB%96/">其他</a></div><div class="post_share"><div class="social-share" data-image="https://img0.baidu.com/it/u=1473109762,986772641&amp;fm=26&amp;fmt=auto" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer=""></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/12/21/Go/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/zsh-%20command%20not%20found-%20%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/"><img class="prev-cover" src="https://img1.baidu.com/it/u=3211663267,2296585043&amp;fm=26&amp;fmt=auto" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">zsh: command not found: 解决方法</div></div></a></div><div class="next-post pull-right"><a href="/2021/12/21/Go/Go%E8%AF%AD%E8%A8%80%E8%BF%9B%E9%98%B6/02%20Go%201.16%20%E4%B8%AD%E5%85%B3%E4%BA%8E%20go%20get%20%E5%92%8C%20go%20install%20%E4%BD%A0%E5%BF%85%E9%A1%BB%E6%B3%A8%E6%84%8F%E7%9A%84%E5%9C%B0%E6%96%B9/"><img class="next-cover" src="https://img2.baidu.com/it/u=927172306,3765293649&amp;fm=26&amp;fmt=auto" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Go1.16中关于go get和go install你必须注意的地方</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/12/23/%E5%85%B6%E4%BB%96/01%20api%E5%92%8Csdk%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB/" title="api和sdk有什么区别"><img class="cover" src="https://img0.baidu.com/it/u=1473109762,986772641&amp;fm=26&amp;fmt=auto" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-23</div><div class="title">api和sdk有什么区别</div></div></a></div><div><a href="/2021/12/23/%E5%85%B6%E4%BB%96/03%20%E7%90%86%E8%A7%A3HTML%20HTTP%20API%20%E5%92%8CURL/" title="理解HTML HTTP API 和URL"><img class="cover" src="https://img0.baidu.com/it/u=1473109762,986772641&amp;fm=26&amp;fmt=auto" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-23</div><div class="title">理解HTML HTTP API 和URL</div></div></a></div><div><a href="/2021/12/23/%E5%85%B6%E4%BB%96/04%20%E6%B5%85%E6%9E%90%20Open%20API%20%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83/" title="浅析 Open API 设计规范"><img class="cover" src="https://img0.baidu.com/it/u=1473109762,986772641&amp;fm=26&amp;fmt=auto" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-23</div><div class="title">浅析 Open API 设计规范</div></div></a></div></div></div><hr><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/typora/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"></div><div class="author-info__name">John Doe</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">412</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">41</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/zhzhang12138"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my blog   <img src="https://cdn.jsdelivr.net/gh/CNhuazhu/Image/pig.gif"></div><timing></timing></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%8A%B1%E4%BA%86%E4%B8%A4%E4%B8%AA%E6%98%9F%E6%9C%9F%EF%BC%8C%E6%88%91%E7%BB%88%E4%BA%8E%E6%8A%8A-WSGI-%E6%95%B4%E6%98%8E%E7%99%BD%E4%BA%86"><span class="toc-number">1.</span> <span class="toc-text">花了两个星期，我终于把 WSGI 整明白了</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#01-WSGI-%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%8C%E5%9B%A0%E4%BD%95%E8%80%8C%E7%94%9F%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">01. WSGI 是什么，因何而生？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#02-HTTP%E8%AF%B7%E6%B1%82%E6%98%AF%E5%A6%82%E4%BD%95%E5%88%B0%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E7%9A%84%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">02. HTTP请求是如何到应用程序的？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#03-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84-WSGI-Server"><span class="toc-number">1.3.</span> <span class="toc-text">03. 实现一个简单的 WSGI Server</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#04-%E5%AE%9E%E7%8E%B0%E2%80%9C%E9%AB%98%E5%B9%B6%E5%8F%91%E2%80%9D%E7%9A%84-WSGI-Server"><span class="toc-number">1.4.</span> <span class="toc-text">04. 实现“高并发”的 WSGI Server</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#05-%E7%AC%AC%E4%B8%80%E6%AC%A1%E8%B7%AF%E7%94%B1%EF%BC%9APasteDeploy"><span class="toc-number">1.5.</span> <span class="toc-text">05. 第一次路由：PasteDeploy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#06-PasteDeploy-%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E"><span class="toc-number">1.6.</span> <span class="toc-text">06. PasteDeploy 使用说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#07-webob-dec-wsgify-%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="toc-number">1.7.</span> <span class="toc-text">07. webob.dec.wsgify 装饰器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#08-%E7%AC%AC%E4%BA%8C%E6%AC%A1%E8%B7%AF%E7%94%B1%EF%BC%9A%E4%B8%AD%E9%97%B4%E4%BB%B6-routes-%E8%B7%AF%E7%94%B1"><span class="toc-number">1.8.</span> <span class="toc-text">08. 第二次路由：中间件 routes 路由</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="toc-number">1.9.</span> <span class="toc-text">附录：参考文章</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/07/26/Redis/10%20Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%8E%9F%E7%90%86/" title="Redis分布式锁原理"><img src="https://img1.baidu.com/it/u=3487592486,3962685646&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=GIF?w=750&amp;h=375" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Redis分布式锁原理"></a><div class="content"><a class="title" href="/2022/07/26/Redis/10%20Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%8E%9F%E7%90%86/" title="Redis分布式锁原理">Redis分布式锁原理</a><time datetime="2022-07-26T06:35:00.000Z" title="发表于 2022-07-26 14:35:00">2022-07-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/07/26/%E6%95%B0%E6%8D%AE%E5%BA%93-%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/SQL%20Server%20%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" title="SQL Server存储过程"><img src="https://img1.baidu.com/it/u=1981766091,2455428334&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=800&amp;h=320" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="SQL Server存储过程"></a><div class="content"><a class="title" href="/2022/07/26/%E6%95%B0%E6%8D%AE%E5%BA%93-%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/SQL%20Server%20%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" title="SQL Server存储过程">SQL Server存储过程</a><time datetime="2022-07-26T01:44:00.000Z" title="发表于 2022-07-26 09:44:00">2022-07-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/07/25/Message%20Queuing/08%20Rabbitmq%E5%85%AD%E7%A7%8D%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%BC%8F/" title="Rabbitmq六种工作模式"><img src="https://img0.baidu.com/it/u=2946146902,4220925632&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=889&amp;h=500" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Rabbitmq六种工作模式"></a><div class="content"><a class="title" href="/2022/07/25/Message%20Queuing/08%20Rabbitmq%E5%85%AD%E7%A7%8D%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%BC%8F/" title="Rabbitmq六种工作模式">Rabbitmq六种工作模式</a><time datetime="2022-07-25T07:27:00.000Z" title="发表于 2022-07-25 15:27:00">2022-07-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/07/22/MySQL%E7%B3%BB%E5%88%97/10%20MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%88%AA%E5%8F%96.md/" title="MySQL数据库之字符串截取"><img src="https://picture-typora-bucket.oss-cn-shanghai.aliyuncs.com/blog/mysql.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="MySQL数据库之字符串截取"></a><div class="content"><a class="title" href="/2022/07/22/MySQL%E7%B3%BB%E5%88%97/10%20MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%88%AA%E5%8F%96.md/" title="MySQL数据库之字符串截取">MySQL数据库之字符串截取</a><time datetime="2022-07-22T07:43:00.000Z" title="发表于 2022-07-22 15:43:00">2022-07-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/07/04/zookeeper/00%20Zookeeper%E5%8F%AF%E4%BB%A5%E5%81%9A%E4%BB%80%E4%B9%88/" title="Zookeeper可以做什么"><img src="https://img1.baidu.com/it/u=4185159880,2993513238&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=PNG?w=900&amp;h=383" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Zookeeper可以做什么"></a><div class="content"><a class="title" href="/2022/07/04/zookeeper/00%20Zookeeper%E5%8F%AF%E4%BB%A5%E5%81%9A%E4%BB%80%E4%B9%88/" title="Zookeeper可以做什么">Zookeeper可以做什么</a><time datetime="2022-07-04T01:44:00.000Z" title="发表于 2022-07-04 09:44:00">2022-07-04</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent"><div id="footer-wrap"><div class="copyright">©2020 - 2022 <i id="heartbeat" class="fa fas fa-heartbeat"></i>  John Doe</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my <a href="">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="translateLink" type="button" title="简繁转换">简</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="algolia-search"><div class="search-dialog"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="/js/search/algolia.js"></script><div class="js-pjax"><script async="async">var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',()=> {preloader.endLoading()})
+setTimeout(function(){preloader.endLoading();}, 3000);</script></div><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '',
+      appKey: '',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script src="/js/timing.js"></script><script src="https://cdn.jsdelivr.net/gh/weilain/cdn-photo/js/jquery.min.js"></script><script async="" data-pjax="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script type="text/javascript" src="/js/crash_cheat.js"></script></body></html>
